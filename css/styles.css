@@ -4,8 +4,33 @@
     --color-suave: #CBF3F0;     
     --color-fondo: #FFFFFF;      
     --color-principal: #2EC4B6;  
+    --color-principal-oscuro: #1F8F84;
 }
 
-body {
+.nav-link.active{
+    border-bottom: 3px solid var(--color-acento);   
+}
+
+.navbar{
+    background-color: var(--color-principal);
+}
+.navbar-brand, .nav-link{
+    color:var(--color-fondo);
+}
+
+.logo{
+    height: 50px;
+}
+
+.avatar{
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
     background-color: var(--color-suave);
+    color: var(--color-principal-oscuro);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    
 }
