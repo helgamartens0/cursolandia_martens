@@ -1,0 +1,8 @@
+Navbar en Light Sea Green (#2EC4B6) con el texto en blanco — es tu color dominante, el que va a "vestir" la marca.
+Sandy Brown (#F4A259) lo usé como acento puntual: el subrayado del ítem de menú activo, el detalle superior de las tarjetas PRO y el badge "Pro".
+
+Frozen Water (#CBF3F0) para elementos suaves: el avatar circular y los chips de etiquetas (tags) de cada curso.
+
+Charcoal Brown (#2F3E36) en vez de negro puro para todo el texto — se ve más cálido y menos duro.
+
+Tipografía: Poppins (bold) para títulos y marca, Inter para el resto del texto — buena combinación gratuita en Google Fonts, fácil de sumar a Bootstrap.

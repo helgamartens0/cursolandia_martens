@@ -1,0 +1,11 @@
+:root {
+    --color-texto: #2F3E36;      
+    --color-acento: #F4A259;     
+    --color-suave: #CBF3F0;     
+    --color-fondo: #FFFFFF;      
+    --color-principal: #2EC4B6;  
+}
+
+body {
+    background-color: var(--color-suave);
+}
