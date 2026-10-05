@@ -48,7 +48,7 @@
     color: var(--color-principal-oscuro);
     font-weight: bold;
     text-decoration: none;
-    background-color: #fff;
+    background-color: var(--color-fondo);
     border-color: var(--color-principal-oscuro);
 }
 
