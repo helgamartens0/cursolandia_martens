@@ -13,14 +13,12 @@
           </a>
           <ul class="dropdown-menu">
             <li><a class="dropdown-item" href="#">Ver mis cursos</a></li>
-            <li><a class="dropdown-item" href="#">Inscribirse</a></li>
-            <li><a class="dropdown-item" href="#">Ver material</a></li>
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" href="#">Ver todos los cursos</a></li>
           </ul>
         </li>
         <li class="nav-item">
-          <a class="nav-link" aria-current="page" href="#">PERFIL</a>
+          <a class="nav-link"  href="#">PERFIL</a>
         </li>
       </ul>
       <form class="d-flex" role="search">
