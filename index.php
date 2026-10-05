@@ -52,7 +52,12 @@
     <link href="css/styles.css" rel="stylesheet">
 </head>
 <body>
-    <?php require 'includes/navbar.php'; ?>
+    <?php 
+    
+        require 'includes/navbar.php';
+        require_once 'conexiones/conexion.php';
+
+    ?>
     <div class="container mt-4">
             <h3>Cursos PRO - Destacados</h3>
             <div class="row g-3">
