@@ -1,3 +1,16 @@
+<?php
+session_start();
+
+if (isset($_SESSION['id_usuario'])) {
+    header('Location: vistas/principal.php');
+    exit;
+}
+
+// Si procesar_login.php dejo un error, lo leemos y lo borramos (se muestra una sola vez)
+$error = $_SESSION['error_login'] ?? '';
+$email = $_SESSION['email_login'] ?? '';
+unset($_SESSION['error_login'], $_SESSION['email_login']);
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -70,11 +83,14 @@
                 <div class="inicio-login w-100">
                     <h2 class="mb-1">¡Hola de nuevo!</h2>
                     <p class="text-secondary mb-4">Inici&aacute; sesi&oacute;n para seguir aprendiendo.</p>
-
-                    <form method="post" action="index.php" class="d-flex flex-column gap-3">
+            
+                    <?php if ($error !== ''): ?>
+                        <div class="alert alert-danger" role="alert"><?= htmlspecialchars($error) ?></div>
+                    <?php endif; ?> 
+                    <form method="post" action="procesos/procesar_login.php" class="d-flex flex-column gap-3">
                         <div>
                             <label for="email" class="form-label fw-semibold">Email</label>
-                            <input type="email" id="email" name="email" class="form-control inicio-input" placeholder="tu@email.com" required>
+                            <input type="email" id="email" name="email" class="form-control inicio-input" placeholder="tu@email.com" value="<?= htmlspecialchars($email) ?>" required>
                         </div>
                         <div>
                             <label for="clave" class="form-label fw-semibold">Contraseña</label>

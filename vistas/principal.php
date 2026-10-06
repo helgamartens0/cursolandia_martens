@@ -2,6 +2,8 @@
    
         require_once __DIR__ . '/../conexiones/conexion.php';
         require_once __DIR__ . '/../controles/ControlCurso.php';
+        require_once __DIR__ . '/../includes/verificar_sesion.php';
+        
         
         $controlCurso = new ControlCurso($conexion);
         $cursos = $controlCurso->obtenerTodos();
@@ -17,6 +19,7 @@
 </head>
 <body>
     <?php  
+    
         require __DIR__ . '/../includes/navbar.php';
     ?>
     <div class="container mt-4">

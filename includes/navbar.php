@@ -24,7 +24,19 @@
       <form class="d-flex" role="search">
         <input class="form-control me-2" type="search" placeholder="Buscar cursos..." >
       </form>
-      <div class="avatar"><span>HM</span></div>
+      
+<!-- para el avatar con las iniciales -> nos lleva al perfil yy para cerrar sesion -->
+      <div class="dropdown">
+        <button class="avatar border-0 p-0" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Menú de usuario">
+        <?= htmlspecialchars($_SESSION['iniciales']) ?>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end">
+          <li><span class="dropdown-item-text">Hola, <?= htmlspecialchars($_SESSION['nombre']) ?></span></li>
+          <li><hr class="dropdown-divider"></li> 
+          <li><a class="dropdown-item" href="perfil.php">Ver perfil</a></li>
+          <li><a class="dropdown-item" href="cerrar_sesion.php">Cerrar sesi&oacute;n</a></li>
+        </ul>
+      </div>
     </div>
   </div>
 </nav>
