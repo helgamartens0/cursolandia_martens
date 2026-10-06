@@ -43,7 +43,9 @@
 .card-pro{
     border-top: 4px solid var(--color-acento);
 }
-
+.curso{
+    border-top: 4px solid var(--color-principal-oscuro);
+}
 .link-curso{
     color: var(--color-principal-oscuro);
     font-weight: bold;

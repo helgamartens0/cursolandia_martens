@@ -1,46 +1,10 @@
 <?php
-    $cursos= [
-        [
-        'titulo'      => 'Introducción a PHP',
-        'descripcion' => 'Aprendé lo básico de PHP desde cero.',
-        'costo'       => null,
-        'cupo'        => 20,
-        'fechaInicio' => '2026-10-15',
-        'fechaFin'    => '2026-12-15',
-        'etiquetas'   => ['php', 'programacion'],
-        'es_pro'      => true
-        ],
-        [
-        'titulo'      => 'Introducción al Diseño Grafico',
-        'descripcion' => 'Aprendé a diseñar paginas web desde cero.',
-        'costo'       => 1000,
-        'cupo'        => 50,
-        'fechaInicio' => '2026-11-10',
-        'fechaFin'    => '2026-12-20',
-        'etiquetas'   => ['diseño', 'figma'],
-        'es_pro'      => false
-        ],
-        [
-        'titulo'      => 'Arquitectura de computadoras',
-        'descripcion' => 'Aprendé arquitectura de computadoras como un pro.',
-        'costo'       => 30000,
-        'cupo'        => 10,
-        'fechaInicio' => '2027-02-10',
-        'fechaFin'    => '2027-12-12',
-        'etiquetas'   => ['arquitectura', 'pc'],
-        'es_pro'      => true
-        ],
-        [
-        'titulo'      => 'JAVA para principiantes',
-        'descripcion' => 'Aprendé a programar en java',
-        'costo'       => null,
-        'cupo'        => 200,
-        'fechaInicio' => '2026-10-15',
-        'fechaFin'    => '2026-12-15',
-        'etiquetas'   => ['java', 'programacion'],
-        'es_pro'      => false
-        ],
-    ];
+   
+        require_once 'conexiones/conexion.php';
+        require_once 'controles/ControlCurso.php';
+        
+        $controlCurso = new ControlCurso($conexion);
+        $cursos = $controlCurso->obtenerTodos();
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -52,27 +16,25 @@
     <link href="css/styles.css" rel="stylesheet">
 </head>
 <body>
-    <?php 
-    
+    <?php  
         require 'includes/navbar.php';
-        require_once 'conexiones/conexion.php';
-
     ?>
     <div class="container mt-4">
-            <h3>Cursos PRO - Destacados</h3>
+            <h3>Todos los cursos</h3>
             <div class="row g-3">
                 <?php foreach($cursos as $curso):?>
-                    <?php if($curso['es_pro']): ?>
                 <div class="col-sm-6">
-                    <div class="card card-pro">
-                        <div class="card-body">
-                            <h5 class="card-title"><?php echo $curso['titulo'] ?><span class="badge"> Pro</span></h5>
-                            <p class="card-text"><?php echo $curso['descripcion']?></p>
-                            <a href="#" class="btn link-curso">Ir al curso</a>
+                    <div class="card">
+                        <div class="card-body curso">
+                            <h5 class="card-title"><?php echo htmlspecialchars($curso->getTitulo())  ?> </h5>
+                            <?= $curso->esGratuito() ? 'Gratis' : 'Pago' ?>
+                            <br><?= "fecha de inicio: ". htmlspecialchars($curso->getFechaInicio()) ?>
+                            <br><?= "fecha de fin: " . htmlspecialchars($curso->getFechaFin()) ?>
+                            <p class="card-text"><?php echo htmlspecialchars($curso->getDescripcion())?></p>
+                            <a href="vistas/curso.php?id=<?=$curso->getId()?>" class="btn link-curso">Ir al curso</a>
                         </div>
                     </div>
                 </div>
-                    <?php endif ?>
                 <?php endforeach?>
                 
             </div>
