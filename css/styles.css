@@ -4,8 +4,119 @@
     --color-suave: #CBF3F0;     
     --color-fondo: #FFFFFF;      
     --color-principal: #2EC4B6;  
-    --color-principal-oscuro: #1F8F84;
+    --color-principal-oscuro: #17706A;
 }
+
+
+/*pagina de inicioo*/
+body{
+    font-family: 'Inter', system-ui, sans-serif;
+    color: var(--color-texto);
+}
+h1, h2{
+    font-family: 'Poppins', system-ui, sans-serif;
+}
+
+/*presentasaon*/
+.inicio-presentacion{
+    position: relative;
+    background-color: var(--color-principal);
+    color: var(--color-texto);
+    padding: 2rem 1.5rem;
+}
+.inicio-marca{
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 800;
+}
+.inicio-etiqueta{
+    align-self: flex-start;
+    background-color: var(--color-texto);
+    color: var(--color-suave);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 0.4rem 0.9rem;
+    border-radius: 999px;
+}
+.inicio-titulo{
+    font-size: 2.4rem;
+    font-weight: 800;
+    line-height: 1.08;
+    margin: 0;
+}
+.resaltado{
+    background: linear-gradient(transparent 62%, var(--color-acento) 62%, var(--color-acento) 90%, transparent 90%);
+    padding: 0 0.25rem;
+}
+.inicio-texto{
+    font-size: 1.15rem;
+    max-width: 500px;
+    margin: 0;
+}
+.inicio-icono{
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    border-radius: 12px;
+    background-color: var(--color-fondo);
+    color: var(--color-principal-oscuro);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/*barra ondulada del medio*/
+.inicio-onda{
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 160px;
+    height: 100%;
+}
+
+/*formulario de inicio de sesion / registro */
+.inicio-login{
+    max-width: 360px;
+}
+.inicio-input{
+    height: 46px;
+    border-radius: 10px;
+}
+.inicio-input:focus{
+    border-color: var(--color-principal);
+    box-shadow: 0 0 0 0.25rem var(--color-suave);
+}
+.btn-iniciar{
+    height: 48px;
+    border-radius: 10px;
+    background-color: var(--color-acento);
+    color: var(--color-texto);
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+}
+.btn-iniciar:hover{
+    background-color: var(--color-texto);
+    color: var(--color-fondo);
+}
+.btn-registrarse{
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--color-principal);
+    border-radius: 10px;
+    color: var(--color-principal-oscuro);
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+}
+.btn-registrarse:hover{
+    background-color: var(--color-suave);
+    color: var(--color-texto);
+    border-color: var(--color-principal);
+}
+
 
 .nav-link.active{
     border-bottom: 3px solid var(--color-acento);   
@@ -58,4 +169,14 @@
     border-color: var(--color-acento);
     background-color: var(--color-fondo);
     color: var(--color-acento);
+}
+
+/* Pantallas grandes (992px o más): más aire y lugar para la onda */
+@media (min-width: 992px){
+    .inicio-presentacion{
+        padding: 3rem 10rem 3.5rem 4.5rem;
+    }
+    .inicio-titulo{
+        font-size: 3.4rem;
+    }
 }
