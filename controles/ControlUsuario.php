@@ -1,6 +1,6 @@
 <?php 
 
-require_once __DIR__.'/../clases/Usuario.php/';
+require_once __DIR__.'/../clases/Usuario.php';
 
 class ControlUsuario{
     private $conexion;

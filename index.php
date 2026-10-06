@@ -27,34 +27,34 @@
 
                 <div class="d-flex flex-column gap-4 my-5">
                     <span class="inicio-etiqueta">Cursos creados por la comunidad</span>
-                    <h1 class="inicio-titulo">Aprend&eacute y enseñ&aacute lo que te <span class="resaltado">apasiona</span></h1>
-                    <p class="inicio-texto">En Cursolandia cualquiera puede crear su propio curso o anotarse en el de otros. Gratis o pagos, p&uacuteblicos o privados: vos eleg&iacutes.</p>
+                    <h1 class="inicio-titulo">Aprend&eacute; y enseñ&aacute; lo que te <span class="resaltado">apasiona</span></h1>
+                    <p class="inicio-texto">En Cursolandia cualquiera puede crear su propio curso o anotarse en el de otros. Gratis o pagos, p&uacute;blicos o privados: vos eleg&iacute;s.</p>
 
                     <ul class="list-unstyled d-flex flex-column gap-3 m-0">
                         <li class="d-flex align-items-center gap-3">
                             <span class="inicio-icono">
                                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
                             </span>
-                            Cre&aacute tus cursos y compart&iacute material
+                            Cre&aacute; tus cursos y compart&iacute; material
                         </li>
                         <li class="d-flex align-items-center gap-3">
                             <span class="inicio-icono">
                                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
                             </span>
-                            Inscribite y particip&aacute en los foros
+                            Inscribite y particip&aacute; en los foros
                         </li>
                         <li class="d-flex align-items-center gap-3">
                             <span class="inicio-icono">
                                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 2l3 7 7 .6-5.3 4.6 1.6 7.1L12 17.6 5.7 21.3l1.6-7.1L2 9.6 9 9z"/></svg>
                             </span>
-                            Recib&iacute cursos recomendados seg&uacuten tus intereses
+                            Recib&iacute; cursos recomendados seg&uacute;n tus intereses
                         </li>
                     </ul>
                 </div>
 
                 <p class="d-flex align-items-center gap-2 m-0 small">
                     <span class="badge">PRO</span>
-                    Con el plan Pro, tus cursos aparecen destacados y sin l&iacutemites.
+                    Con el plan Pro, tus cursos aparecen destacados y sin l&iacute;mites.
                 </p>
 
                 <!--Barra ondulada (solo en pantallas grandes) -->
@@ -69,7 +69,7 @@
             <section class="col-lg-5 d-flex align-items-center justify-content-center p-4 p-lg-5">
                 <div class="inicio-login w-100">
                     <h2 class="mb-1">¡Hola de nuevo!</h2>
-                    <p class="text-secondary mb-4">Inici&aacute sesi&oacuten para seguir aprendiendo.</p>
+                    <p class="text-secondary mb-4">Inici&aacute; sesi&oacute;n para seguir aprendiendo.</p>
 
                     <form method="post" action="index.php" class="d-flex flex-column gap-3">
                         <div>
@@ -80,12 +80,12 @@
                             <label for="clave" class="form-label fw-semibold">Contraseña</label>
                             <input type="password" id="clave" name="clave" class="form-control inicio-input" placeholder="••••••••" required>
                         </div>
-                        <button type="submit" class="btn btn-iniciar mt-2">Iniciar sesi&oacuten</button>
+                        <button type="submit" class="btn btn-iniciar mt-2">Iniciar sesi&oacute;n</button>
                     </form>
 
                     <div class="d-flex align-items-center gap-3 my-4 text-secondary small">
                         <hr class="flex-grow-1 m-0">
-                        ¿Todav&iacutea no tenés cuenta?
+                        ¿Todav&iacute;a no tenés cuenta?
                         <hr class="flex-grow-1 m-0">
                     </div>
 
