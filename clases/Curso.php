@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/Usuario.php';
+
     class Curso{
         private $id;
         private $titulo;
@@ -8,11 +10,11 @@
         private $fecha_inicio;
         private $fecha_fin;
         private $tipo_acceso;
-        private $id_creador;
+        private $creador;
         
         /*----------------------------------------*/
         
-        public function __construct($id,$titulo,$descripcion,$costo,$cupo,$fecha_inicio,$fecha_fin,$tipo_acceso,$id_creador){
+        public function __construct($id,$titulo,$descripcion,$costo,$cupo,$fecha_inicio,$fecha_fin,$tipo_acceso,Usuario $creador){
             $this->id = $id;
             $this->titulo = $titulo;
             $this->descripcion = $descripcion;
@@ -21,7 +23,7 @@
             $this->fecha_inicio = $fecha_inicio;
             $this->fecha_fin = $fecha_fin;
             $this->tipo_acceso = $tipo_acceso;
-            $this->id_creador = $id_creador;
+            $this->creador = $creador;
         }
         
         /*----------------------------------------*/
@@ -59,7 +61,11 @@
         }
 
         public function getIdCreador(){
-            return $this->id_creador;
+            return $this->creador->getId_usuario();
+        }
+        
+        public function getCreador(){
+            return $this->creador;
         }
         
         /*----------------------------------------*/
@@ -74,5 +80,10 @@
         public function estaActivo(){
             $hoy = date('Y-m-d');
             return $this->fecha_inicio <= $hoy && $hoy <= $this->fecha_fin;
+        }
+        
+        // RN08: los cursos de usuarios con plan Pro se muestran destacados
+        public function esDestacado(){
+            return $this->creador->esPro();
         }
     }

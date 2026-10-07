@@ -1,6 +1,9 @@
 <?php 
     class Usuario{
         private $id_usuario;
+        /*para ver si su creador es pro*/
+        private $creador_pro;
+        
         private $nombre;
         private $apellido;
         private $email;
