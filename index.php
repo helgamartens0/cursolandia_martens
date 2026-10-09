@@ -87,14 +87,14 @@ unset($_SESSION['error_login'], $_SESSION['email_login']);
                     <?php if ($error !== ''): ?>
                         <div class="alert alert-danger" role="alert"><?= htmlspecialchars($error) ?></div>
                     <?php endif; ?> 
-                    <form method="post" action="procesos/procesar_login.php" class="d-flex flex-column gap-3">
+                    <form method="post" action="procesos/procesar_login.php" class="d-flex flex-column gap-3" data-validar novalidate>
                         <div>
                             <label for="email" class="form-label fw-semibold">Email</label>
                             <input type="email" id="email" name="email" class="form-control inicio-input" placeholder="tu@email.com" value="<?= htmlspecialchars($email) ?>" required>
                         </div>
                         <div>
                             <label for="clave" class="form-label fw-semibold">Contraseña</label>
-                            <input type="password" id="clave" name="clave" class="form-control inicio-input" placeholder="••••••••" required>
+                            <input type="password" id="clave" name="clave" class="form-control inicio-input" placeholder="••••••••" data-sin-verde required>
                         </div>
                         <button type="submit" class="btn btn-iniciar mt-2">Iniciar sesi&oacute;n</button>
                     </form>
@@ -111,5 +111,6 @@ unset($_SESSION['error_login'], $_SESSION['email_login']);
 
         </div>
     </main>
+    <script src="js/validacion.js"></script>
 </body>
-</html>
+</html>

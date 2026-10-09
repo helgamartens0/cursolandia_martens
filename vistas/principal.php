@@ -21,7 +21,7 @@ $misCursos  = $controlCurso->obtenerActivosDeInscripto($_SESSION['id_usuario']);
 
     <main class="container my-4">
 
-        <!-- Cursos de usuarios Pro (RN08) -->
+        <!-- Cursos de usuarios Pro -->
         <section class="mb-5">
             <h2 class="h3 mb-3">Cursos PRO destacados</h2>
             <?php if (count($destacados) === 0): ?>

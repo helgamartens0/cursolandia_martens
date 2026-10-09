@@ -180,3 +180,30 @@ h1, h2{
         font-size: 3.4rem;
     }
 }
+
+/* ===== REGISTRO (vistas/registro.php) ===== */
+.registro-form{
+    max-width: 560px;
+}
+.link-registro{
+    color: var(--color-principal-oscuro);
+    font-weight: 700;
+}
+@media (min-width: 992px){
+    .registro-presentacion .inicio-titulo{
+        font-size: 2.8rem;
+    }
+}
+
+/* ===== VALIDACIÓN DE FORMULARIOS ===== */
+/* .inicio-input:focus pone el borde turquesa; estas reglas hacen que el rojo y el verde de Bootstrap ganen */
+.inicio-input.is-invalid,
+.inicio-input.is-invalid:focus{
+    border-color: var(--bs-form-invalid-border-color);
+    box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.2);
+}
+.inicio-input.is-valid,
+.inicio-input.is-valid:focus{
+    border-color: var(--bs-form-valid-border-color);
+    box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.2);
+}

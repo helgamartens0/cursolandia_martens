@@ -1,13 +1,10 @@
-<?php 
+<?php
 
 require_once __DIR__.'/../clases/Usuario.php';
+require_once __DIR__.'/../traits/AccesoBD.php';
 
 class ControlUsuario{
-    private $conexion;
-    
-    public function __construct($conexion){
-        $this->conexion = $conexion;
-    }
+    use AccesoBD; // trae $conexion, el constructor y consultar()
 
     public function buscarPorEmail(string $email): ?Usuario{
         $sql = "SELECT id_usuario, nombre, apellido, email, contrasenia, fecha_nacimiento,
@@ -15,10 +12,7 @@ class ControlUsuario{
                 FROM usuario
                 WHERE email = ?";
                 
-        $sentencia = mysqli_prepare($this->conexion,$sql);
-        mysqli_stmt_bind_param($sentencia,'s',$email);
-        mysqli_stmt_execute($sentencia);
-        $resultado = mysqli_stmt_get_result($sentencia);
+        $resultado = $this->consultar($sql,'s',[$email]);
         $fila = mysqli_fetch_assoc($resultado);
         
         if($fila === null){
@@ -39,4 +33,22 @@ class ControlUsuario{
             $fila['fecha_venc_pro']
         );
     }
-}
+    
+    /*existencia de usuario con ese DNI (el dni es el id) */
+    public function existe(int $dni): bool{
+        $resultado = $this->consultar("SELECT 1 FROM usuario WHERE id_usuario = ?", 'i', [$dni]);
+        return mysqli_fetch_assoc($resultado) !== null;
+    }
+    
+    //dar de alta (la contraseña pasa encriptada, plan e imagen toman valor x defecto (se editan desde el perfil))
+    public function registrar(int $dni, string $nombre, string $apellido, string $email, string $clave, string $fechaNacimiento): void{
+        $hash = password_hash($clave, PASSWORD_DEFAULT);
+        
+        $sql = "INSERT INTO usuario (id_usuario,nombre,apellido,email,contrasenia,fecha_nacimiento)
+                VALUES (?,?,?,?,?,?)";
+        
+        $this->consultar($sql, 'isssss', [$dni, $nombre, $apellido, $email, $hash, $fechaNacimiento]);
+    }
+    
+    
+}
