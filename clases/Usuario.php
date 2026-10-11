@@ -1,9 +1,10 @@
 <?php 
     class Usuario{
+        // RN01 y RN02: máximo de cursos activos (creados o inscripto) en plan gratuito
+        public const LIMITE_GRATUITO = 3;
+        // la imagen que pone la base cuando el usuario no subió ninguna
+        public const IMAGEN_DEFAULT = 'img/avatar-default.png';
         private $id_usuario;
-        /*para ver si su creador es pro*/
-        private $creador_pro;
-        
         private $nombre;
         private $apellido;
         private $email;
@@ -93,4 +94,8 @@
             $ultima = mb_strtoupper(mb_substr($this->apellido,0,1));
             return $primera.$ultima;
         }
+        //true si subió una foto propia (si no, en el perfil mostramos las iniciales)
+        public function tieneFoto(): bool{
+            return $this->imagen_principal !== self::IMAGEN_DEFAULT;
+        }   
     }

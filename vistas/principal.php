@@ -6,6 +6,8 @@ require_once __DIR__ . '/../controles/ControlCurso.php';
 $controlCurso = new ControlCurso($conexion);
 $destacados = $controlCurso->obtenerDestacados();
 $misCursos  = $controlCurso->obtenerActivosDeInscripto($_SESSION['id_usuario']);
+
+$paginaActual = 'cursos'; // para que el navbar marque CURSOS
 ?>
 <!DOCTYPE html>
 <html lang="es">

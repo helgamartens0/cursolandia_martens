@@ -13,26 +13,19 @@ class ControlUsuario{
                 WHERE email = ?";
                 
         $resultado = $this->consultar($sql,'s',[$email]);
-        $fila = mysqli_fetch_assoc($resultado);
-        
-        if($fila === null){
-            return null;
-        }
-        
-        return new Usuario(
-            $fila['id_usuario'],
-            $fila['nombre'],
-            $fila['apellido'],
-            $fila['email'],
-            $fila['contrasenia'],
-            $fila['fecha_nacimiento'],
-            $fila['telefono'],
-            $fila['antecedentes'],
-            $fila['imagen_principal'],
-            $fila['tipo_plan'],
-            $fila['fecha_venc_pro']
-        );
+        return $this->armarUsuario(mysqli_fetch_assoc($resultado));
     }
+    
+    
+    public function buscarPorId(int $id): ?Usuario{
+        $sql = "SELECT id_usuario, nombre, apellido, email, contrasenia, fecha_nacimiento,
+                       telefono, antecedentes, imagen_principal, tipo_plan, fecha_venc_pro
+                FROM usuario
+                WHERE id_usuario = ?";
+        $resultado = $this->consultar($sql,'i',[$id]);
+        return $this->armarUsuario(mysqli_fetch_assoc($resultado));
+    }
+    
     
     /*existencia de usuario con ese DNI (el dni es el id) */
     public function existe(int $dni): bool{
@@ -50,5 +43,45 @@ class ControlUsuario{
         $this->consultar($sql, 'isssss', [$dni, $nombre, $apellido, $email, $hash, $fechaNacimiento]);
     }
     
+    //arma el objeto Usuario con una fila de la consulta (o null si no vino ninguna)
+    private function armarUsuario(?array $fila): ?Usuario{
+        if($fila === null){
+            return null;
+        }
+
+        return new Usuario(
+            $fila['id_usuario'],
+            $fila['nombre'],
+            $fila['apellido'],
+            $fila['email'],
+            $fila['contrasenia'],
+            $fila['fecha_nacimiento'],
+            $fila['telefono'],
+            $fila['antecedentes'],
+            $fila['imagen_principal'],
+            $fila['tipo_plan'],
+            $fila['fecha_venc_pro']
+        );
+    }
     
-}
+    //para la parte de "MI ACTIVIDAD" (cursos activos CREADOS, cursos activos INSCRIPTO)
+    public function contarCursosCreados(int $id): int{
+        $sql = "SELECT COUNT(*) AS cantidad
+                FROM curso
+                WHERE id_creador = ? AND fecha_fin >= CURDATE()";
+        
+        $fila = mysqli_fetch_assoc($this->consultar($sql,'i',[$id]));
+        
+        return (int) $fila['cantidad'];
+    }
+    
+    public function contarInscripcionesActivas(int $id): int{
+        $sql = "SELECT COUNT(*) AS cantidad
+                FROM inscripcion i
+                JOIN curso c ON c.id_curso = i.id_curso
+                WHERE i.id_usuario = ? AND c.fecha_fin >= CURDATE()";
+        
+        $fila = mysqli_fetch_assoc($this->consultar($sql,'i',[$id]));
+        return (int) $fila['cantidad'];
+    }
+}

@@ -207,3 +207,61 @@ h1, h2{
     border-color: var(--bs-form-valid-border-color);
     box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.2);
 }
+
+
+/* ===== PERFIL (vistas/perfil.php) ===== */
+.fondo-suave{
+    background-color: #F6F8F7;
+}
+.perfil .card{
+    border-radius: 16px;
+}
+.perfil-encabezado{
+    overflow: hidden;
+}
+.perfil-portada{
+    height: 84px;
+    background-color: var(--color-principal);
+}
+.perfil-avatar{
+    width: 112px;
+    height: 112px;
+    margin-top: -56px;
+    border-radius: 50%;
+    border: 5px solid var(--color-fondo);
+    background-color: var(--color-suave);
+    color: var(--color-principal-oscuro);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Poppins', sans-serif;
+    font-size: 2.4rem;
+    font-weight: 800;
+    object-fit: cover;
+}
+.badge-gratuito{
+    background-color: #E9EEEC;
+}
+.dato-titulo{
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #5b6b63;
+}
+.perfil-vacio{
+    border: 1.5px dashed #c9d4cf;
+    border-radius: 12px;
+    padding: 1rem;
+}
+.perfil-vencimiento{
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 800;
+}
+.perfil .progress{
+    height: 8px;
+}
+.perfil .progress-bar{
+    background-color: var(--color-principal);
+}

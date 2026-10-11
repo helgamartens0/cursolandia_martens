@@ -1,3 +1,7 @@
+<?php
+// cada página dice en $paginaActual cuál es ('cursos' o 'perfil') antes de incluir el navbar
+$paginaActual = $paginaActual ?? '';
+?>
 <nav class="navbar navbar-expand-lg">
   <div class="container-fluid">
     <a class="navbar-brand" href="principal.php"><img class="logo" src="../img/logo-cursolandia-navbar.png" alt="Cursolandia"></a>
@@ -8,7 +12,7 @@
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
         
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" >
+          <a class= "nav-link dropdown-toggle <?= $paginaActual === 'cursos' ? 'active' : '' ?>" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" >
             CURSOS
           </a>
           <ul class="dropdown-menu">
@@ -18,7 +22,7 @@
           </ul>
         </li>
         <li class="nav-item">
-          <a class="nav-link"  href="#">PERFIL</a>
+          <a class="nav-link <?= $paginaActual === 'perfil' ? 'active' : '' ?>" href="perfil.php">PERFIL</a>
         </li>
       </ul>
       <form class="d-flex" role="search">
