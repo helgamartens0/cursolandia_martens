@@ -1,5 +1,6 @@
 <?php 
-    class Usuario{
+require_once __DIR__ . '/Etiqueta.php';
+class Usuario{
         // RN01 y RN02: máximo de cursos activos (creados o inscripto) en plan gratuito
         public const LIMITE_GRATUITO = 3;
         // la imagen que pone la base cuando el usuario no subió ninguna
@@ -16,6 +17,7 @@
         private $tipo_plan;
         private $fecha_venc_pro;
         
+        private $intereses = [];
         /*----------------------------------------*/
         
         public function __construct($id_usuario,$nombre,$apellido,$email,$contrasenia,$fecha_nacimiento,$telefono,$antecedentes,$imagen_principal,$tipo_plan,$fecha_venc_pro){
@@ -74,6 +76,9 @@
             return $this->fecha_venc_pro;
         }
         
+        public function getIntereses(): array{
+            return $this->intereses;
+        }
         /*----------------------------------------*/
         
         /*encapsulamiento para verificar contraseña sin q salga de aca, x eso no la pongo con el getter */
@@ -98,4 +103,8 @@
         public function tieneFoto(): bool{
             return $this->imagen_principal !== self::IMAGEN_DEFAULT;
         }   
+        
+        public function agregarInteres(Etiqueta $e): void{
+            $this->intereses[] = $e;
+        }
     }
