@@ -265,3 +265,23 @@ h1, h2{
 .perfil .progress-bar{
     background-color: var(--color-principal);
 }
+
+/* chips de etiquetas (intereses del usuario y, más adelante, etiquetas de los cursos) */
+.chip{
+    display: inline-block;
+    padding: 0.35rem 0.8rem;
+    border-radius: 999px;
+    background-color: var(--color-suave);
+    color: var(--color-principal-oscuro);
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+}
+.chip-agregar{
+    background-color: transparent;
+    border: 1.5px dashed var(--color-principal);
+}
+.chip-agregar:hover{
+    background-color: var(--color-suave);
+    color: var(--color-principal-oscuro);
+}

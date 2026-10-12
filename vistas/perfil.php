@@ -2,6 +2,7 @@
 require_once __DIR__ . '/../includes/verificar_sesion.php';
 require_once __DIR__ . '/../conexiones/conexion.php';
 require_once __DIR__ . '/../controles/ControlUsuario.php';
+require_once __DIR__ . '/../controles/ControlEtiqueta.php';
 
 // Traemos al usuario que inició sesión (el id lo guardamos en la sesión al loguearse)
 $controlUsuario = new ControlUsuario($conexion);
@@ -12,6 +13,12 @@ if ($usuario === null) {
     header('Location: cerrar_sesion.php');
     exit;
 }
+
+$controlEtiqueta = new ControlEtiqueta($conexion);
+foreach($controlEtiqueta->obtenerInteresesDeUsuario($usuario->getId_usuario()) as $etiqueta){
+    $usuario ->agregarinteres($etiqueta); 
+}
+
 
 // Para la tarjeta del plan (RN01 y RN02)
 $cursosCreados = $controlUsuario->contarCursosCreados($usuario->getId_usuario());
@@ -119,10 +126,19 @@ $paginaActual = 'perfil'; // para que el navbar marque PERFIL
                     <div class="card-body p-4">
                         <h2 class="h5 mb-1">Mis intereses</h2>
                         <p class="text-secondary small mb-3">Los usamos para recomendarte cursos.</p>
+                        <?php if (count($usuario->getIntereses()) === 0): ?>
                         <div class="perfil-vacio">
                             <p class="text-secondary small mb-2">Todavía no elegiste intereses.</p>
                             <a href="editar_perfil.php" class="link-registro small">+ Agregar intereses</a>
                         </div>
+                        <?php else: ?>
+                        <div class="d-flex flex-wrap gap-2">
+                            <?php foreach ($usuario->getIntereses() as $interes): ?>
+                                <span class="chip"><?= htmlspecialchars($interes->getNombre()) ." - " ?></span>
+                            <?php endforeach; ?>
+                            <a href="editar_perfil.php" class="chip chip-agregar">+ Agregar</a>
+                        </div>
+                        <?php endif; ?>
                     </div>
                 </section>
 

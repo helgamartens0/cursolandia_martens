@@ -28,8 +28,19 @@ class ControlEtiqueta{
             ON ce.id_etiqueta = e.id_etiqueta
             WHERE ce.id_curso = ?
             ORDER BY e.nombre";
+            
+        /*recordatorio:
+            $this->consultar(...): es la función del trait AccesoBD. 
+            Prepara la consulta, reemplaza el ? y la ejecuta. 
+            [$idUsuario]: el valor que va en el ?. Va entre corchetes porque 
+            consultar siempre recibe un array, aunque haya un solo valor.*/
         $resultado = $this->consultar($sql,'i',[$id]);
+        
+        /*$resultado: queda con las filas que devolvió MySQL, 
+        pero todavía son "crudas", no objetos. */
         return $this->armarEtiquetas($resultado);
+        /*Le pasa esas filas a armarEtiquetas, que las convierte en 
+        objetos Etiqueta, y devuelve eso. */
     }
     
     //armado de etiquetas
