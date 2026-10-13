@@ -4,7 +4,8 @@
 // OJO: esto es solo para comodidad del usuario. El servidor (procesos/) vuelve a validar todo.
 
 document.querySelectorAll('form[data-validar]').forEach(function (form) {
-    const campos = form.querySelectorAll('input');
+    // los campos bloqueados (disabled) no se validan ni se pintan
+    const campos = form.querySelectorAll('input:not([disabled])');
 
     campos.forEach(function (campo) {
         // Al salir del campo: lo marcamos como "tocado" y lo validamos

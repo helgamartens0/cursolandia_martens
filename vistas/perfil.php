@@ -16,7 +16,7 @@ if ($usuario === null) {
 
 $controlEtiqueta = new ControlEtiqueta($conexion);
 foreach($controlEtiqueta->obtenerInteresesDeUsuario($usuario->getId_usuario()) as $etiqueta){
-    $usuario ->agregarinteres($etiqueta); 
+    $usuario->agregarInteres($etiqueta); 
 }
 
 

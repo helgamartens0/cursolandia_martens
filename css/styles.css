@@ -285,3 +285,17 @@ h1, h2{
     background-color: var(--color-suave);
     color: var(--color-principal-oscuro);
 }
+
+/* la × para quitar un interés (en editar perfil) */
+.chip-quitar{
+    border: none;
+    background: transparent;
+    padding: 0 0.15rem;
+    line-height: 1;
+    font-size: 1.1rem;
+    color: var(--color-principal-oscuro);
+    cursor: pointer;
+}
+.chip-quitar:hover{
+    color: #b02a37;
+}

@@ -84,4 +84,13 @@ class ControlUsuario{
         $fila = mysqli_fetch_assoc($this->consultar($sql,'i',[$id]));
         return (int) $fila['cantidad'];
     }
+    
+    public function actualizarPerfil(int $id, string $email, string $fechaNacimiento, ?string $telefono, ?string $antecedentes): void{
+        $sql = "UPDATE usuario
+            SET email = ?, fecha_nacimiento = ?, telefono = ?, antecedentes = ?
+            WHERE id_usuario = ?";
+        $this->consultar($sql,'ssssi',[$email,$fechaNacimiento,$telefono,$antecedentes,$id]);
+    }
+    
+    
 }

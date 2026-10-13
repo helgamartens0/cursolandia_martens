@@ -54,4 +54,34 @@ class ControlEtiqueta{
         }
         return $etiquetas;
     }
+    
+    //buscar o crear etiqueta
+    public function buscarOcrear(string $nombre): Etiqueta{
+        $nombre = mb_strtolower(trim($nombre));
+        $sql = self::SELECT_ETIQUETA . " WHERE e.nombre = ?";
+        $resultado = $this->consultar($sql,'s',[$nombre]);
+        $fila = mysqli_fetch_assoc($resultado);
+        if($fila!==null){
+            return new Etiqueta(
+                $fila['id_etiqueta'],
+                $fila['nombre']
+            );
+        }
+        
+        $sql2 = "INSERT INTO etiqueta (nombre) VALUES (?)";
+        $this->consultar($sql2,'s',[$nombre]);
+        return new Etiqueta(mysqli_insert_id($this->conexion),$nombre);
+    }
+    
+    //agregar interes (si ya existia una etiqueta con ese nombre no hace nada)
+    public function agregarInteres(int $idUsuario, Etiqueta $etiqueta): void{
+        $sql = "INSERT IGNORE INTO usuario_interes (id_usuario,id_etiqueta) VALUES (?,?)";
+        $this->consultar($sql,'ii',[$idUsuario,$etiqueta->getId_etiqueta()]);
+    }
+    
+    //borrar interes 
+    public function eliminarInteres(int $idUsuario, int $idEtiqueta): void{
+        $sql = "DELETE FROM usuario_interes WHERE id_usuario = ? AND id_etiqueta = ?";
+        $this->consultar($sql,'ii',[$idUsuario,$idEtiqueta]);
+    }
 }
