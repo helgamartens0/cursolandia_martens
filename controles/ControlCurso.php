@@ -27,13 +27,15 @@ class ControlCurso
     }
 
     // Cursos de creadores con plan Pro vigente que todavía no terminaron
-    public function obtenerDestacados()
+    public function obtenerDestacados(int $idUsuario)
     {
         $sql = self::SELECT_CURSO . "
-                WHERE u.tipo_plan = 'pro' AND u.fecha_venc_pro >= CURDATE()
+                WHERE u.tipo_plan = 'pro' 
+                  AND u.fecha_venc_pro >= CURDATE()
                   AND c.fecha_fin >= CURDATE()
+                  AND c.id_creador <> ?
                 ORDER BY c.fecha_inicio";
-        $resultado = $this->consultar($sql);
+        $resultado = $this->consultar($sql,'i',[$idUsuario]);
         return $this->armarCursos($resultado);
     }
 

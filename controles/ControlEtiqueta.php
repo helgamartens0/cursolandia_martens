@@ -84,4 +84,10 @@ class ControlEtiqueta{
         $sql = "DELETE FROM usuario_interes WHERE id_usuario = ? AND id_etiqueta = ?";
         $this->consultar($sql,'ii',[$idUsuario,$idEtiqueta]);
     }
+    
+    public function traerEtiquetas(): array{
+        $sql = self::SELECT_ETIQUETA . " ORDER BY e.nombre";
+        
+        return $this->armarEtiquetas($this->consultar($sql));
+    }
 }

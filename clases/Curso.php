@@ -2,8 +2,8 @@
 require_once __DIR__ . '/Usuario.php';
 
     class Curso{
-        private $id;
-        private $titulo;
+        private int $id;
+        private string $titulo;
         private $descripcion;
         private $costo;
         private $cupo;

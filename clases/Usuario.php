@@ -5,22 +5,25 @@ class Usuario{
         public const LIMITE_GRATUITO = 3;
         // la imagen que pone la base cuando el usuario no subió ninguna
         public const IMAGEN_DEFAULT = 'img/avatar-default.png';
-        private $id_usuario;
-        private $nombre;
-        private $apellido;
-        private $email;
-        private $contrasenia;
-        private $fecha_nacimiento;
-        private $telefono;
-        private $antecedentes;
-        private $imagen_principal;
-        private $tipo_plan;
-        private $fecha_venc_pro;
-        
-        private $intereses = [];
+        private int $id_usuario;
+        private string $nombre;
+        private string $apellido;
+        private string $email;
+        private string $contrasenia;
+        private string $fecha_nacimiento;
+        private ?string $telefono;
+        private ?string $antecedentes;
+        private string $imagen_principal;
+        private string $tipo_plan;
+        private ?string $fecha_venc_pro;
+        private array $intereses = [];
         /*----------------------------------------*/
         
-        public function __construct($id_usuario,$nombre,$apellido,$email,$contrasenia,$fecha_nacimiento,$telefono,$antecedentes,$imagen_principal,$tipo_plan,$fecha_venc_pro){
+          
+        public function __construct(int $id_usuario, string $nombre, string $apellido, string $email, string $contrasenia,
+                            string $fecha_nacimiento, ?string $telefono, ?string $antecedentes,
+                            string $imagen_principal, string $tipo_plan, ?string $fecha_venc_pro){
+                                  
             $this->id_usuario = $id_usuario;
             $this->nombre = $nombre;
             $this->apellido = $apellido;
@@ -33,7 +36,6 @@ class Usuario{
             $this->tipo_plan = $tipo_plan;
             $this->fecha_venc_pro = $fecha_venc_pro;
         }
-   
         /*----------------------------------------*/
    
         public function getId_usuario(){

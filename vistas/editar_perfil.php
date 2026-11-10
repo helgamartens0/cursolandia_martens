@@ -4,26 +4,25 @@ require_once __DIR__ . '/../conexiones/conexion.php';
 require_once __DIR__ . '/../controles/ControlUsuario.php';
 require_once __DIR__ . '/../controles/ControlEtiqueta.php';
 
-// Traemos al usuario que inició sesión (el id lo guardamos en la sesión al loguearse)
 $controlUsuario = new ControlUsuario($conexion);
 $usuario = $controlUsuario->buscarPorId($_SESSION['id_usuario']);
 
-// Por si la cuenta ya no existe (por ejemplo, se borró de la base con la sesión abierta)
 if ($usuario === null) {
     header('Location: cerrar_sesion.php');
     exit;
 }
 
 $controlEtiqueta = new ControlEtiqueta($conexion);
+$todasLasEtiquetas = $controlEtiqueta->traerEtiquetas();
 foreach($controlEtiqueta->obtenerInteresesDeUsuario($usuario->getId_usuario()) as $etiqueta){
     $usuario->agregarInteres($etiqueta); 
 }
-// Mensajes que dejan los procesos (se muestran una sola vez)
+
 $mensaje = $_SESSION['mensaje_perfil'] ?? '';
 $errores = $_SESSION['errores_perfil'] ?? [];
 unset($_SESSION['mensaje_perfil'], $_SESSION['errores_perfil']);
 
-$paginaActual = 'perfil'; // para que el navbar marque PERFIL
+$paginaActual = 'perfil'; 
 ?>
 
 
@@ -43,9 +42,10 @@ $paginaActual = 'perfil'; // para que el navbar marque PERFIL
     <main class="container perfil my-4">
         <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-4">
             <h1 class="h3 mb-0">Editar perfil</h1>
-            <a href="perfil.php" class="link-registro">← Volver a mi perfil</a>
+            <a href="perfil.php" class="link-registro">Volver a mi perfil</a>
         </div>
 
+<!-- aca muestro los mensajes de cdo edite el perfil -->
         <?php if ($mensaje !== ''): ?>
             <div class="alert alert-success" role="alert"><?= htmlspecialchars($mensaje) ?></div>
         <?php endif; ?>
@@ -123,7 +123,7 @@ $paginaActual = 'perfil'; // para que el navbar marque PERFIL
                         <p class="text-secondary small mb-3">Los usamos para recomendarte cursos.</p>
 
                         <?php if (count($usuario->getIntereses()) === 0): ?>
-                            <p class="text-secondary small">Todavía no elegiste intereses.</p>
+                            <p class="text-secondary small">Todavia no elegiste intereses.</p>
                         <?php else: ?>
                             <div class="d-flex flex-wrap gap-2">
                                 <?php foreach ($usuario->getIntereses() as $interes): ?>
@@ -141,8 +141,13 @@ $paginaActual = 'perfil'; // para que el navbar marque PERFIL
                             <input type="hidden" name="accion" value="agregar">
                             <label for="nuevo_interes" class="visually-hidden">Nuevo interés</label>
                             <input type="text" id="nuevo_interes" name="nombre" class="form-control inicio-input"
-                                maxlength="30" placeholder="Escribí un interés (ej: fotografía)" required>
-                            <button type="submit" class="btn btn-registrarse px-4">Agregar</button>
+                                maxlength="30" placeholder="Escribí un interés (ej: fotografía)"  list="etiquetas-existentes" autocomplete="off" required>
+                            <datalist id="etiquetas-existentes">
+                                <?php foreach ($todasLasEtiquetas as $etiqueta): ?>
+                                    <option value="<?= htmlspecialchars($etiqueta->getNombre()) ?>">
+                                <?php endforeach; ?>
+                            </datalist>
+                                <button type="submit" class="btn btn-registrarse px-4">Agregar</button>
                         </form>
                     </div>
                 </section>
