@@ -1,6 +1,6 @@
 <?php 
-
 session_start(); //abrimos la sesion 
+require_once __DIR__ . '/../controles/ControlAdministrador.php';
 
 // Si alguien entra a este archivo escribiendo la URL (sin enviar el formulario), lo devolvemos al inicio
 //sin procesar nada 
@@ -25,13 +25,26 @@ if($usuario !== null && $usuario->verificarContrasenia($clave)){
     $_SESSION['id_usuario'] = $usuario->getId_usuario(); //($_SESSION es un arreglo q PHP recuerda entre pagina y pagina)
     $_SESSION['nombre'] = $usuario->getNombre();
     $_SESSION['iniciales'] = $usuario->getIniciales();
-    
+    $_SESSION['rol'] = 'usuario';
     header('Location: ../vistas/principal.php');
     exit;
     
 }
 
 
+    // Si no es un usuario vemos si no es el administrador? uso mismo login para el admin
+    $controlAdministrador = new ControlAdministrador($conexion);
+    $admin = $controlAdministrador->buscarPorEmail($email);
+
+    if ($admin !== null && $admin->verificarContrasenia($clave)) {
+        session_regenerate_id(true);
+        $_SESSION['rol']              = 'administrador';
+        $_SESSION['id_administrador'] = $admin->getId_administrador();
+        $_SESSION['nombre']           = $admin->getNombre();
+
+        header('Location: ../vistas/panel_admin.php');   // su página de inicio (la hacemos en B)
+        exit;
+    }
     //todo mal: mostramos error
     $_SESSION['error_login'] = 'El email o la contraseña no son correctos';
     $_SESSION['email_login'] = $email;

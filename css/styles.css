@@ -299,3 +299,34 @@ h1, h2{
 .chip-quitar:hover{
     color: #b02a37;
 }
+
+/* ===== AVISOS Y SOLICITUD DE PLAN PRO (perfil) ===== */
+/* aviso llamativo con los colores de Cursolandia (en vez del verde de Bootstrap) */
+.aviso-exito{
+    background-color: var(--color-suave);
+    border: 2px solid var(--color-principal);
+    color: var(--color-texto);
+    border-radius: 14px;
+}
+.aviso-icono{
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background-color: var(--color-principal);
+    color: var(--color-fondo);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+/* cuadrito con el estado de la solicitud dentro de la tarjeta del plan */
+.solicitud-estado{
+    background-color: #FFF4E8;
+    border: 1.5px solid var(--color-acento);
+    border-radius: 12px;
+    padding: 1rem;
+}
+.solicitud-rechazada{
+    background-color: #FDECEC;
+    border-color: #E4A1A6;
+}

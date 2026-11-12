@@ -3,6 +3,7 @@ require_once __DIR__ . '/../includes/verificar_sesion.php';
 require_once __DIR__ . '/../conexiones/conexion.php';
 require_once __DIR__ . '/../controles/ControlUsuario.php';
 require_once __DIR__ . '/../controles/ControlEtiqueta.php';
+require_once __DIR__ . '/../controles/ControlSolicitud.php';
 
 // Traemos al usuario que inició sesión (el id lo guardamos en la sesión al loguearse)
 $controlUsuario = new ControlUsuario($conexion);
@@ -29,6 +30,14 @@ $limite        = Usuario::LIMITE_GRATUITO;
 $telefono     = $usuario->getTelefono() ?? '';
 $antecedentes = $usuario->getAntecedentes() ?? '';
 
+// Solicitud de plan Pro: su última solicitud (o null si nunca mandó) para la tarjeta del plan
+$controlSolicitud = new ControlSolicitud($conexion);
+$ultimaSolicitud = $controlSolicitud->obtenerUltimaDeUsuario($usuario->getId_usuario());
+
+// Aviso que deja procesar_solicitud_pro.php (se muestra una sola vez)
+$aviso = $_SESSION['aviso_perfil'] ?? '';
+unset($_SESSION['aviso_perfil']);
+
 $paginaActual = 'perfil'; // para que el navbar marque PERFIL
 ?>
 <!DOCTYPE html>
@@ -45,6 +54,20 @@ $paginaActual = 'perfil'; // para que el navbar marque PERFIL
     <?php require __DIR__ . '/../includes/navbar.php'; ?>
 
     <main class="container perfil my-4">
+
+        <!-- Aviso llamativo (por ejemplo: "¡Tu solicitud fue enviada!"). Se cierra con la × -->
+        <?php if ($aviso !== ''): ?>
+            <div class="alert aviso-exito alert-dismissible fade show d-flex align-items-center gap-3 mb-4" role="alert">
+                <span class="aviso-icono">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+                </span>
+                <div>
+                    <strong class="d-block">¡Listo!</strong>
+                    <?= htmlspecialchars($aviso) ?>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+            </div>
+        <?php endif; ?>
 
         <!-- PARTE DE ARRIBA (foto de perfil / nombre / plan / mail / btn editar perfil) -->
         <section class="card perfil-encabezado mb-4">
@@ -187,8 +210,28 @@ $paginaActual = 'perfil'; // para que el navbar marque PERFIL
                                 <li>✓ Sin límite de cursos creados ni de inscripciones</li>
                                 <li>✓ Más archivos y más espacio por curso</li>
                             </ul>
-                            <a href="solicitar_pro.php" class="btn btn-iniciar w-100 d-flex align-items-center justify-content-center">Solicitar Plan Pro</a>
-                            <p class="text-secondary small mt-2 mb-0">Subís el comprobante de pago y un administrador lo activa.</p>
+                            <?php if ($ultimaSolicitud !== null && $ultimaSolicitud->estaPendiente()): ?>
+
+                                <!-- Ya mandó una y el admin todavía no la revisó: no mostramos el botón -->
+                                <div class="solicitud-estado">
+                                    <p class="fw-semibold mb-1">⏳ Tu solicitud está pendiente de aprobación</p>
+                                    <p class="small mb-0">Te avisamos acá cuando esté resuelta. Enviada el <?= date('d/m/Y', strtotime($ultimaSolicitud->getFecha_envio())) ?>.</p>
+                                </div>
+
+                            <?php else: ?>
+
+                                <!-- Si la última fue rechazada, mostramos el motivo (y puede mandar otra) -->
+                                <?php if ($ultimaSolicitud !== null && $ultimaSolicitud->getEstado() === 'denegada'): ?>
+                                    <div class="solicitud-estado solicitud-rechazada mb-3">
+                                        <p class="fw-semibold mb-1">Tu última solicitud fue rechazada</p>
+                                        <p class="small mb-0">Motivo: <?= htmlspecialchars($ultimaSolicitud->getMotivo_rechazo() ?? 'sin especificar') ?></p>
+                                    </div>
+                                <?php endif; ?>
+
+                                <a href="solicitar_pro.php" class="btn btn-iniciar w-100 d-flex align-items-center justify-content-center">Solicitar Plan Pro</a>
+                                <p class="text-secondary small mt-2 mb-0">Subís el comprobante de pago y un administrador lo activa.</p>
+
+                            <?php endif; ?>
                         </div>
                     </section>
 
@@ -222,4 +265,4 @@ $paginaActual = 'perfil'; // para que el navbar marque PERFIL
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 </body>
 </html>
- 
+ 

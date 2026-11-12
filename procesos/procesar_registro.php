@@ -89,6 +89,7 @@ session_regenerate_id(true);
 $_SESSION['id_usuario'] = $usuario->getId_usuario();
 $_SESSION['nombre'] = $usuario->getNombre();
 $_SESSION['iniciales'] = $usuario->getIniciales();
+$_SESSION['rol'] = 'usuario';
 
 header('Location: ../vistas/principal.php');
 exit;

@@ -5,7 +5,10 @@ if (isset($_SESSION['id_usuario'])) {
     header('Location: vistas/principal.php');
     exit;
 }
-
+if (($_SESSION['rol'] ?? '') === 'administrador') {
+    header('Location: vistas/panel_admin.php');
+    exit;
+}
 // Si procesar_login.php dejo un error, lo leemos y lo borramos (se muestra una sola vez)
 $error = $_SESSION['error_login'] ?? '';
 $email = $_SESSION['email_login'] ?? '';
@@ -113,4 +116,4 @@ unset($_SESSION['error_login'], $_SESSION['email_login']);
     </main>
     <script src="js/validacion.js"></script>
 </body>
-</html>
+</html>
