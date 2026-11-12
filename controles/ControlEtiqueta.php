@@ -74,13 +74,13 @@ class ControlEtiqueta{
     }
     
     //agregar interes (si ya existia una etiqueta con ese nombre no hace nada)
-    public function agregarInteres(int $idUsuario, Etiqueta $etiqueta): void{
+    public function agregarInteres(int $idUsuario, Etiqueta $etiqueta){
         $sql = "INSERT IGNORE INTO usuario_interes (id_usuario,id_etiqueta) VALUES (?,?)";
         $this->consultar($sql,'ii',[$idUsuario,$etiqueta->getId_etiqueta()]);
     }
     
     //borrar interes 
-    public function eliminarInteres(int $idUsuario, int $idEtiqueta): void{
+    public function eliminarInteres(int $idUsuario, int $idEtiqueta){
         $sql = "DELETE FROM usuario_interes WHERE id_usuario = ? AND id_etiqueta = ?";
         $this->consultar($sql,'ii',[$idUsuario,$idEtiqueta]);
     }
@@ -89,5 +89,11 @@ class ControlEtiqueta{
         $sql = self::SELECT_ETIQUETA . " ORDER BY e.nombre";
         
         return $this->armarEtiquetas($this->consultar($sql));
+    }
+    
+    // le da? una etiqueta a un curso (si ya la tenia, no hace nada)
+    public function agregarACurso(int $idCurso, Etiqueta $etiqueta){
+        $sql = "INSERT IGNORE INTO curso_etiqueta (id_curso, id_etiqueta) VALUES (?, ?)";
+        $this->consultar($sql, 'ii', [$idCurso, $etiqueta->getId_etiqueta()]);
     }
 }

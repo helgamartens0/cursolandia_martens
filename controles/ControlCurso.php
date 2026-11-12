@@ -86,4 +86,13 @@ class ControlCurso
         }
         return $cursos;
     }
+    
+    // crear un curso nuevo y devuelve el id que le dio la base
+    public function crear(string $titulo, string $descripcion, ?float $costo, ?int $cupo,
+                      string $fechaInicio, string $fechaFin, string $tipoAcceso, int $idCreador): int{
+    $sql = "INSERT INTO curso (titulo, descripcion, costo, cupo, fecha_inicio, fecha_fin, tipo_acceso, id_creador)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    $this->consultar($sql, 'ssdisssi', [$titulo, $descripcion, $costo, $cupo, $fechaInicio, $fechaFin, $tipoAcceso, $idCreador]);
+    return mysqli_insert_id($this->conexion);
+    }
 }

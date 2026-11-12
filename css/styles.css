@@ -340,3 +340,10 @@ h1, h2{
     background-color: var(--color-principal-oscuro);
     border-bottom: none;   
 }
+
+/* chips chiquitos (sugerencias de etiquetas en crear curso) */
+.chip-chico{
+    font-size: 0.75rem;
+    padding: 0.15rem 0.55rem;
+    margin: 0.25rem 0.15rem 0 0;
+}
