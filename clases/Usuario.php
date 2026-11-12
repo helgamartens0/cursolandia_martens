@@ -115,4 +115,8 @@ class Usuario{
             return $this->esPro() || $cursosActivosCreados < self::LIMITE_GRATUITO;
         }
 
+        //limite de inscripciones para usuarios gratis ite
+        public function puedeInscribirse(int $inscripcionesActivas): bool{
+            return $this->esPro() || $inscripcionesActivas < self::LIMITE_GRATUITO;
+        }
     }

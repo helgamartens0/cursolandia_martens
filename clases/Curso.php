@@ -1,6 +1,5 @@
 <?php
 require_once __DIR__ . '/Usuario.php';
-
     class Curso{
         private int $id;
         private string $titulo;
@@ -82,8 +81,18 @@ require_once __DIR__ . '/Usuario.php';
             return $this->fecha_inicio <= $hoy && $hoy <= $this->fecha_fin;
         }
         
-        // RN08: los cursos de usuarios con plan Pro se muestran destacados
+        // para q los cursos de usuarios con plan Pro se muestren destacados
         public function esDestacado(){
             return $this->creador->esPro();
+        }
+    
+        //hay lugar si el curso no tiene cupo (null = sin limite) o si todavia no se lleno
+        public function hayCupoDisponible(int $inscriptos){
+            return $this->cupo === null || $inscriptos < $this->cupo;
+        }
+
+        //si es pago o privado, la inscripcion queda pendiente hasta que el creador la confirme
+        public function requiereConfirmacion(){
+            return !$this->esGratuito() || !$this->esPublico(); //o sea si noes gratuito o no es publico
         }
     }

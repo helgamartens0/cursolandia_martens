@@ -3,6 +3,8 @@ require_once __DIR__ . '/../includes/verificar_sesion.php';
 require_once __DIR__ . '/../conexiones/conexion.php';
 require_once __DIR__ . '/../controles/ControlCurso.php';
 require_once __DIR__ . '/../controles/ControlEtiqueta.php';
+require_once __DIR__ . '/../controles/ControlUsuario.php';
+require_once __DIR__ . '/../controles/ControlInscripcion.php';
 
 //el id del curso viene en la direccion: curso.php?id=5
 $idCurso = (int) ($_GET['id'] ?? 0);
@@ -22,6 +24,19 @@ $etiquetas = $controlEtiqueta->obtenerEtiquetasDeCurso($curso->getId());
 //$esCreador xq solo el creador sube material y confirma inscripciones 
 $esCreador = $curso->getIdCreador() == $_SESSION['id_usuario'];
 
+//datos para la inscripcion
+$controlUsuario = new ControlUsuario($conexion);
+$controlInscripcion = new ControlInscripcion($conexion);
+
+$usuario = $controlUsuario->buscarPorId($_SESSION['id_usuario']);
+$estadoInscripcion = $controlInscripcion->obtenerEstado($_SESSION['id_usuario'], $curso->getId());  //null, 'pendiente' o 'confirmada'
+$inscriptos = $controlInscripcion->contarInscriptos($curso->getId());
+$inscripcionesActivas = $controlUsuario->contarInscripcionesActivas($_SESSION['id_usuario']);
+
+//error que deja procesar_inscripcion.php (se muestra una sola vez)
+$errorCurso = $_SESSION['error_curso'] ?? '';
+unset($_SESSION['error_curso']);
+
 //aviso que deja procesar_crear_curso.php (se muestra una sola vez)
 $aviso = $_SESSION['aviso_curso'] ?? '';
 unset($_SESSION['aviso_curso']);
@@ -39,7 +54,7 @@ if ($curso->esGratuito()) {
 if ($curso->getCupo() === null) {
     $cupo = 'Sin límite';
 } else {
-    $cupo = $curso->getCupo() . ' personas';
+        $cupo = $inscriptos . ' de ' . $curso->getCupo() . ' lugares';
 }
 
 if ($curso->estaActivo()) {
@@ -79,6 +94,9 @@ $paginaActual = 'cursos';
                 <strong><?= htmlspecialchars($aviso) ?></strong>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
             </div>
+        <?php endif; ?>
+        <?php if ($errorCurso !== ''): ?>
+            <div class="alert alert-danger" role="alert"><?= htmlspecialchars($errorCurso) ?></div>
         <?php endif; ?>
 
         <!-- ENCABEZADO: titulo, creador y estado -->
@@ -142,12 +160,48 @@ $paginaActual = 'cursos';
                     <div class="card-body p-4">
                         <?php if ($esCreador): ?>
                             <p class="fw-semibold mb-3">Sos el creador de este curso</p>
-                            <!-- estas paginas las hacemos despues (CU-10 y CU-12) -->
                             <a href="subir_material.php?id=<?= $curso->getId() ?>" class="btn btn-iniciar w-100 d-flex align-items-center justify-content-center mb-2">Subir material</a>
                             <a href="inscripciones.php?id=<?= $curso->getId() ?>" class="btn btn-registrarse w-100">Ver inscripciones</a>
+
+                        <?php elseif ($estadoInscripcion === 'confirmada'): ?>
+                            <p class="fw-semibold mb-0">✓ Ya te inscribiste en este curso</p>
+
+                        <?php elseif ($estadoInscripcion === 'pendiente'): ?>
+                            <div class="solicitud-estado">
+                                <p class="fw-semibold mb-1">⏳ Tu inscripción está pendiente</p>
+                                <p class="small mb-0">El creador del curso la tiene que confirmar.</p>
+                            </div>
+
+                        <?php elseif (!$curso->estaActivo()): ?>
+                            <!-- solo mientras el curso esta en curso -->
+                            <p class="text-secondary mb-0">Las inscripciones están cerradas: solo te podés inscribir mientras el curso está en curso.</p>
+
+                        <?php elseif (!$curso->hayCupoDisponible($inscriptos)): ?>
+                            <p class="text-secondary mb-0">No quedan lugares en este curso.</p>
+
+                        <?php elseif (!$usuario->puedeInscribirse($inscripcionesActivas)): ?>
+                            <!--  limite del plan gratuito -->
+                            <div class="solicitud-estado">
+                                <p class="fw-semibold mb-1">Llegaste al límite del plan gratuito</p>
+                                <p class="small mb-2">Podés estar inscripto en hasta <?= Usuario::LIMITE_GRATUITO ?> cursos activos a la vez.</p>
+                                <a href="solicitar_pro.php" class="link-registro small">Pasate a Pro</a>
+                            </div>
+
                         <?php else: ?>
-                            <!-- inscribirse (CU-11) lo hacemos despues -->
-                            <p class="small text-secondary">Inscripción: próximamente.</p>
+                            <!-- puede inscribirse -->
+                            <form method="post" action="../procesos/procesar_inscripcion.php">
+                                <input type="hidden" name="id_curso" value="<?= $curso->getId() ?>">
+                                <button type="submit" class="btn btn-iniciar w-100">Inscribirme</button>
+                            </form>
+                            <?php if ($curso->requiereConfirmacion()): ?>
+                                <!-- si la inscripcion requiere de confirmacion del creador: -->
+                                <p class="small text-secondary mt-2 mb-0">
+                                    Tu inscripción va a quedar pendiente hasta que el creador la confirme.
+                                    <?php if (!$curso->esGratuito()): ?>
+                                        El pago se coordina directamente con el creador.
+                                    <?php endif; ?>
+                                </p>
+                            <?php endif; ?>
                         <?php endif; ?>
                     </div>
                 </section>
