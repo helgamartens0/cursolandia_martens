@@ -109,4 +109,10 @@ class Usuario{
         public function agregarInteres(Etiqueta $e): void{
             $this->intereses[] = $e;
         }
+        
+        //limite para usuarios gratis   
+        public function puedeCrearCurso(int $cursosActivosCreados): bool{
+            return $this->esPro() || $cursosActivosCreados < self::LIMITE_GRATUITO;
+        }
+
     }

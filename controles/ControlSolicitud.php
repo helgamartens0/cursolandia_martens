@@ -83,5 +83,47 @@ class ControlSolicitud{
         return $solicitudes[0];
         
     }
+        
+    // Panel del administradorr: todas las solicitudes con un estado ('pendiente', 'aprobada' o 'rechazad')
+    public function obtenerPorEstado(string $estado): array{
+        $sql = self::SELECT_SOLICITUD . " WHERE s.estado = ? ORDER BY s.id_solicitud DESC";
+        $resultado = $this->consultar($sql, 's', [$estado]);
+        return $this->armarSolicitudes($resultado);
+    }
+
+    // Una solicitud por su id (para ver el comprobante y para aprobar/rechazar)
+    public function buscarPorId(int $idSolicitud): ?SolicitudPlanPro{
+        $sql = self::SELECT_SOLICITUD . " WHERE s.id_solicitud = ?";
+        $resultado = $this->consultar($sql, 'i', [$idSolicitud]);
+        $solicitudes = $this->armarSolicitudes($resultado);
+
+        if (count($solicitudes) === 0) {
+            return null;
+        }
+        return $solicitudes[0];
+    }
+       
+    
+    public function guardarResolucion(SolicitudPlanPro $solicitud): void{
+        // 1) Actualizo la solicitud con su nuevo estado
+        $sql = "UPDATE solicitud_plan_pro
+                SET estado = ?, fecha_venc_asignada = ?, motivo_rechazo = ?
+                WHERE id_solicitud = ?";
+        $this->consultar($sql, 'sssi', [
+            $solicitud->getEstado(),
+            $solicitud->getFecha_venc_asignada(),
+            $solicitud->getMotivo_rechazo(),
+            $solicitud->getId_solicitud()
+        ]);
+
+        // 2) Si se aprobo, el usuario pasa a pro
+        if ($solicitud->getEstado() === 'aprobada') {
+            $sql = "UPDATE usuario SET tipo_plan = 'pro', fecha_venc_pro = ? WHERE id_usuario = ?";
+            $this->consultar($sql, 'si', [
+                $solicitud->getFecha_venc_asignada(),
+                $solicitud->getUsuario()->getId_usuario()
+            ]);
+        }
+    }
 }
 

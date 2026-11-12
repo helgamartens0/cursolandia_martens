@@ -330,3 +330,13 @@ h1, h2{
     background-color: #FDECEC;
     border-color: #E4A1A6;
 }
+
+/*para el admin*/
+.nav-pills .pestania{
+    color: var(--color-principal-oscuro);
+    font-weight: 600;
+}
+.nav-pills .pestania.active{
+    background-color: var(--color-principal-oscuro);
+    border-bottom: none;   
+}
