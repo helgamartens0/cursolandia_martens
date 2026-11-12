@@ -12,15 +12,12 @@ if ($usuario === null) {
     exit;
 }
 
-// RN01: ¿puede crear otro curso? (gratuito: hasta 3 activos; Pro: sin límite)
+// puede crear otro curso? (gratuito: hasta 3 activos; Pro: sin límite)
 $cursosActivos = $controlUsuario->contarCursosCreados($usuario->getId_usuario());
 $puedeCrear    = $usuario->puedeCrearCurso($cursosActivos);
 
-// Etiquetas que ya existen, para sugerirlas
-$controlEtiqueta = new ControlEtiqueta($conexion);
-$todasLasEtiquetas = $controlEtiqueta->traerEtiquetas();
 
-// Si el proceso encontró errores, vuelven los mensajes y lo que había escrito
+// Si el proceso encontro errores, vuelven los mensajes y lo que había escrito
 $errores = $_SESSION['errores_curso'] ?? [];
 $datos   = $_SESSION['datos_curso'] ?? [];
 unset($_SESSION['errores_curso'], $_SESSION['datos_curso']);

@@ -90,9 +90,22 @@ class ControlCurso
     // crear un curso nuevo y devuelve el id que le dio la base
     public function crear(string $titulo, string $descripcion, ?float $costo, ?int $cupo,
                       string $fechaInicio, string $fechaFin, string $tipoAcceso, int $idCreador): int{
-    $sql = "INSERT INTO curso (titulo, descripcion, costo, cupo, fecha_inicio, fecha_fin, tipo_acceso, id_creador)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-    $this->consultar($sql, 'ssdisssi', [$titulo, $descripcion, $costo, $cupo, $fechaInicio, $fechaFin, $tipoAcceso, $idCreador]);
-    return mysqli_insert_id($this->conexion);
+        $sql = "INSERT INTO curso (titulo, descripcion, costo, cupo, fecha_inicio, fecha_fin, tipo_acceso, id_creador)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        $this->consultar($sql, 'ssdisssi', [$titulo, $descripcion, $costo, $cupo, $fechaInicio, $fechaFin, $tipoAcceso, $idCreador]);
+        return mysqli_insert_id($this->conexion);
+    }
+    
+    //buscar curso curso por id. Si no existe devuelve null
+    public function buscarPorId(int $idCurso): ?Curso
+    {
+        $sql = self::SELECT_CURSO . " WHERE c.id_curso = ?";
+        $resultado = $this->consultar($sql, 'i', [$idCurso]);
+        $cursos = $this->armarCursos($resultado);
+
+        if (count($cursos) === 0) {
+            return null;
+        }
+        return $cursos[0];
     }
 }

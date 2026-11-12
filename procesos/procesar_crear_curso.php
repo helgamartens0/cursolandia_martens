@@ -33,8 +33,7 @@ $cupo = trim($_POST['cupo'] ?? '');
 $fechaInicio = $_POST['fecha_inicio'] ?? '';
 $fechaFin = $_POST['fecha_fin'] ?? '';
 $tipoAcceso = $_POST['tipo_acceso'] ?? '';
-$tildadas = $_POST['etiquetas'] ?? [];          //las que eligio de la lista (llegan en un array)
-$nuevas = trim($_POST['etiquetas_nuevas'] ?? ''); //las que escribio, separadas por coma
+$etiquetas = trim($_POST['etiquetas'] ?? '');   //las etiquetas separadas por coma
 
 //valido
 $errores = [];
@@ -75,14 +74,8 @@ if ($tipoAcceso !== 'publico' && $tipoAcceso !== 'privado') {
 //junto las etiquetas en una sola lista, sin repetir
 $listaEtiquetas = [];
 
-foreach ($tildadas as $nombre) {
-    $nombre = mb_strtolower(trim($nombre));
-    if ($nombre !== '' && !in_array($nombre, $listaEtiquetas)) {
-        $listaEtiquetas[] = $nombre;
-    }
-}
 
-foreach (explode(',', $nuevas) as $nombre) {   //explode corta el texto en cada coma
+foreach (explode(',', $etiquetas) as $nombre) {   //explode corta el texto en cada coma
     $nombre = mb_strtolower(trim($nombre));
     if ($nombre !== '' && !in_array($nombre, $listaEtiquetas)) {
         $listaEtiquetas[] = $nombre;
@@ -104,8 +97,7 @@ if (count($errores) > 0) {
         'fecha_inicio' => $fechaInicio,
         'fecha_fin' => $fechaFin,
         'tipo_acceso' => $tipoAcceso,
-        'etiquetas' => $tildadas,
-        'etiquetas_nuevas' => $nuevas
+        'etiquetas' => $etiquetas
     ];
     header('Location: ../vistas/crear_curso.php');
     exit;
