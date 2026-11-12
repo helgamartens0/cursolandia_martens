@@ -46,7 +46,7 @@ $paginaActual = 'cursos';
 
         <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-4">
             <h1 class="h3 mb-0">Crear curso</h1>
-            <a href="principal.php" class="link-registro">← Volver</a>
+            <a href="mis_cursos.php" class="link-registro">Volver</a>
         </div>
 
         <?php if (count($errores) > 0): ?>

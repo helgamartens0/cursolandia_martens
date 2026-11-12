@@ -108,4 +108,25 @@ class ControlCurso
         }
         return $cursos[0];
     }
+        
+    //cursos que creo el usuario 
+    public function obtenerCreadosPor(int $idUsuario)
+    {
+        $sql = self::SELECT_CURSO . "
+                WHERE c.id_creador = ?
+                ORDER BY c.fecha_inicio DESC";
+        $resultado = $this->consultar($sql, 'i', [$idUsuario]);
+        return $this->armarCursos($resultado);
+    }
+
+    //cursos en los q esta inscripto 
+    public function obtenerTomadosPor(int $idUsuario)
+    {
+        $sql = self::SELECT_CURSO . "
+                JOIN inscripcion i ON i.id_curso = c.id_curso
+                WHERE i.id_usuario = ?
+                ORDER BY c.fecha_inicio DESC";
+        $resultado = $this->consultar($sql, 'i', [$idUsuario]);
+        return $this->armarCursos($resultado);
+    }
 }

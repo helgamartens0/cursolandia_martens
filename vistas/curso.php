@@ -64,8 +64,11 @@ $paginaActual = 'cursos';
 </head>
 <body class="fondo-suave">
     <?php require __DIR__ . '/../includes/navbar.php'; ?>
-
+        
     <main class="container perfil my-4">
+        <div class="d-flex justify-content-end mb-3">
+            <a href="mis_cursos.php" class="link-registro">Volver a mis cursos</a>
+        </div>
 
         <!-- aviso (ej: "Tu curso fue creado") -->
         <?php if ($aviso !== ''): ?>

@@ -16,7 +16,7 @@ $paginaActual = $paginaActual ?? '';
             CURSOS
           </a>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">Ver mis cursos</a></li>
+            <li><a class="dropdown-item" href="mis_cursos.php">Ver mis cursos</a></li>
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" href="#">Ver todos los cursos</a></li>
           </ul>
