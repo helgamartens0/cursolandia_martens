@@ -4,6 +4,7 @@ require_once __DIR__ . '/../conexiones/conexion.php';
 require_once __DIR__ . '/../controles/ControlUsuario.php';
 require_once __DIR__ . '/../controles/ControlEtiqueta.php';
 require_once __DIR__ . '/../controles/ControlSolicitud.php';
+require_once __DIR__ . '/../includes/avatar.php';
 
 // Traemos al usuario que inició sesión (el id lo guardamos en la sesión al loguearse)
 $controlUsuario = new ControlUsuario($conexion);

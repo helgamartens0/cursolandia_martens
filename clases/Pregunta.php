@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/Usuario.php';
+require_once __DIR__ . '/Respuesta.php';
 
 class Pregunta{
     private int $id_pregunta;
@@ -42,5 +43,31 @@ class Pregunta{
 
     public function estaCerrada(): bool{
         return $this->cerrada;
+    }
+    
+    //guarda en la pregunta una de sus respuestas (en orden, de la primera a la ultima)
+    public function agregarRespuesta(Respuesta $r): void{
+        $this->respuestas[] = $r;
+    }
+
+    public function getRespuestas(): array{
+        return $this->respuestas;
+    }
+
+    //la ultima respuesta que se escribio (null si todavia no hay ninguna)
+    public function ultimaRespuesta(): ?Respuesta{
+        if (count($this->respuestas) === 0) {
+            return null;
+        }
+        return $this->respuestas[count($this->respuestas) - 1];
+    }
+
+    //quien participo ultimo. si nadie respondio todavia, es el que hizo la pregunta
+    public function autorUltimaRespuesta(): Usuario{
+        $ultima = $this->ultimaRespuesta();
+        if ($ultima === null) {
+            return $this->autor;
+        }
+        return $ultima->getAutor();
     }
 }
