@@ -25,6 +25,11 @@ if($usuario !== null && $usuario->verificarContrasenia($clave)){
     $_SESSION['id_usuario'] = $usuario->getId_usuario(); //($_SESSION es un arreglo q PHP recuerda entre pagina y pagina)
     $_SESSION['nombre'] = $usuario->getNombre();
     $_SESSION['iniciales'] = $usuario->getIniciales();
+    //si tiene foto la guardo para la navbar, si no queda vacio y se ven las iniciales
+    $_SESSION['foto'] = '';
+    if ($usuario->tieneFoto()) {
+        $_SESSION['foto'] = $usuario->getImagen_principal();
+    }
     $_SESSION['rol'] = 'usuario';
     header('Location: ../vistas/principal.php');
     exit;

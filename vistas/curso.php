@@ -6,6 +6,7 @@ require_once __DIR__ . '/../controles/ControlEtiqueta.php';
 require_once __DIR__ . '/../controles/ControlUsuario.php';
 require_once __DIR__ . '/../controles/ControlInscripcion.php';
 require_once __DIR__ . '/../controles/ControlArchivo.php';
+require_once __DIR__ . '/../includes/avatar.php';
 
 //el id del curso viene en la direccion: curso.php?id=5
 $idCurso = (int) ($_GET['id'] ?? 0);
@@ -117,7 +118,10 @@ $paginaActual = 'cursos';
                         <span class="badge">PRO</span>
                     <?php endif; ?>
                 </div>
-                <p class="text-secondary mb-2">Por <?= htmlspecialchars($creador->getNombre() . ' ' . $creador->getApellido()) ?></p>
+               <div class="d-flex align-items-center gap-2 mb-2">
+                    <?php mostrarAvatar($creador); ?>
+                    <span class="text-secondary">Por <?= htmlspecialchars($creador->getNombre() . ' ' . $creador->getApellido()) ?></span>
+                </div>
                 <span class="badge badge-gratuito"><?= $estado ?></span>
             </div>
         </section>

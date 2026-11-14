@@ -75,7 +75,7 @@ $paginaActual = 'perfil'; // para que el navbar marque PERFIL
             <div class="card-body d-flex flex-wrap align-items-end justify-content-between gap-3 px-4 pt-0">
                 <div class="d-flex flex-wrap align-items-end gap-3">
                     <?php if ($usuario->tieneFoto()): ?>
-                        <img src="../<?= htmlspecialchars($usuario->getImagen_principal()) ?>" alt="Foto de perfil" class="perfil-avatar">
+                        <?php mostrarAvatar($usuario, 'perfil-avatar'); ?>
                     <?php else: ?>
                         <div class="perfil-avatar"><?= htmlspecialchars($usuario->getIniciales()) ?></div>
                     <?php endif; ?>
@@ -265,4 +265,4 @@ $paginaActual = 'perfil'; // para que el navbar marque PERFIL
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 </body>
 </html>
- 
+ 

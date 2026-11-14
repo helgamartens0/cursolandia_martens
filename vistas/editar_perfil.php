@@ -3,6 +3,7 @@ require_once __DIR__ . '/../includes/verificar_sesion.php';
 require_once __DIR__ . '/../conexiones/conexion.php';
 require_once __DIR__ . '/../controles/ControlUsuario.php';
 require_once __DIR__ . '/../controles/ControlEtiqueta.php';
+require_once __DIR__ . '/../includes/avatar.php';
 
 $controlUsuario = new ControlUsuario($conexion);
 $usuario = $controlUsuario->buscarPorId($_SESSION['id_usuario']);
@@ -155,6 +156,19 @@ $paginaActual = 'perfil';
                 
             </div>
             <div class="col-lg-5 d-flex flex-column gap-4">
+                <section class="card">
+                    <div class="card-body p-4">
+                        <h2 class="h5 mb-3">Foto de perfil</h2>
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <?php mostrarAvatar($usuario, 'perfil-avatar foto-chica'); ?>
+                            <p class="small text-secondary mb-0">JPG o PNG, hasta 2 MB. Si no subís ninguna, se muestran tus iniciales.</p>
+                        </div>
+                        <form method="post" action="../procesos/procesar_foto.php" enctype="multipart/form-data">
+                            <input type="file" class="form-control mb-3" name="foto" accept=".jpg,.jpeg,.png" required>
+                            <button type="submit" class="btn btn-iniciar w-100">Subir foto</button>
+                        </form>
+                    </div>
+                </section>
                 <section class="card">
                     <div class="card-body p-4">
                         <h2 class="h5 mb-3">Cambiar contraseña</h2>

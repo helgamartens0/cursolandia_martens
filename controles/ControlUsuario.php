@@ -92,5 +92,11 @@ class ControlUsuario{
         $this->consultar($sql,'ssssi',[$email,$fechaNacimiento,$telefono,$antecedentes,$id]);
     }
     
+    //guarda la ruta de la foto 
+    public function actualizarFoto(int $id, string $ruta): void{
+        $sql = "UPDATE usuario SET imagen_principal = ? WHERE id_usuario = ?";
+        $this->consultar($sql, 'si', [$ruta, $id]);
+    }
+    
     
 }

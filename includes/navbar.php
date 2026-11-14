@@ -32,7 +32,11 @@ $paginaActual = $paginaActual ?? '';
 <!-- para el avatar con las iniciales -> nos lleva al perfil yy para cerrar sesion -->
       <div class="dropdown">
         <button class="avatar border-0 p-0" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Menú de usuario">
-        <?= htmlspecialchars($_SESSION['iniciales']) ?>
+                <?php if (($_SESSION['foto'] ?? '') !== ''): ?>
+                  <img src="../<?= htmlspecialchars($_SESSION['foto']) ?>" alt="Mi foto">
+                <?php else: ?>
+                  <?= htmlspecialchars($_SESSION['iniciales']) ?>
+                <?php endif; ?>
         </button>
         <ul class="dropdown-menu dropdown-menu-end">
           <li><span class="dropdown-item-text">Hola, <?= htmlspecialchars($_SESSION['nombre']) ?></span></li>

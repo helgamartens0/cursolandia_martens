@@ -347,3 +347,26 @@ h1, h2{
     padding: 0.15rem 0.55rem;
     margin: 0.25rem 0.15rem 0 0;
 }
+
+
+/* fotos de perfil dentro de los circulitos */
+.avatar{
+    flex-shrink: 0;   /* para que no se aplaste en las listas */
+}
+.avatar img{
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+}
+.avatar img, img.avatar{
+    object-fit: cover;   /* recorta la foto en vez de estirarla */
+}
+/* la foto mediana de editar perfil */
+.foto-chica{
+    width: 72px;
+    height: 72px;
+    margin-top: 0;
+    border: none;
+    font-size: 1.6rem;
+    flex-shrink: 0;
+}

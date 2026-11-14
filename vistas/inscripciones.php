@@ -3,6 +3,7 @@ require_once __DIR__ . '/../includes/verificar_sesion.php';
 require_once __DIR__ . '/../conexiones/conexion.php';
 require_once __DIR__ . '/../controles/ControlCurso.php';
 require_once __DIR__ . '/../controles/ControlInscripcion.php';
+require_once __DIR__ . '/../includes/avatar.php';
 
 $idCurso = (int) ($_GET['id'] ?? 0);
 
@@ -74,11 +75,14 @@ $paginaActual = 'cursos';
                 <?php foreach ($pendientes as $inscripcion): ?>
                     <?php $alumno = $inscripcion->getUsuario(); ?>
                     <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 border-bottom py-2">
-                        <div>
-                            <strong><?= htmlspecialchars($alumno->getNombre() . ' ' . $alumno->getApellido()) ?></strong>
-                            <span class="text-secondary small d-block">
-                                <?= htmlspecialchars($alumno->getEmail()) ?> · pidió el <?= date('d/m/Y', strtotime($inscripcion->getFecha_solicitud())) ?>
-                            </span>
+                        <div class="d-flex aling-items-center gap2">
+                            <?php mostrarAvatar($alumno); ?>
+                            <div>
+                                <strong><?= htmlspecialchars($alumno->getNombre() . ' ' . $alumno->getApellido()) ?></strong>
+                                <span class="text-secondary small d-block">
+                                    <?= htmlspecialchars($alumno->getEmail()) ?> · pidió el <?= date('d/m/Y', strtotime($inscripcion->getFecha_solicitud())) ?>
+                                </span>
+                            </div>
                         </div>
                         <div class="d-flex gap-2">
                             <form method="post" action="../procesos/procesar_confirmacion.php">
