@@ -17,15 +17,36 @@ class ControlCurso
         JOIN usuario u ON u.id_usuario = c.id_creador";
 
   
+    //primero los cursos de creadores con Pro vigente, despues el resto, y cada grupo por fecha de inicio
+    private const ORDEN_PRO_PRIMERO = "
+        ORDER BY CASE WHEN u.tipo_plan = 'pro' AND u.fecha_venc_pro >= CURDATE() THEN 0 ELSE 1 END,
+                 c.fecha_inicio";
 
-    // Todos los cursos
+    // Todos los cursos q todavia no terminaron, primero los Pro
     public function obtenerTodos()
     {
-        $sql = self::SELECT_CURSO . " ORDER BY c.fecha_inicio";
+        $sql = self::SELECT_CURSO . "
+                WHERE c.fecha_fin >= CURDATE()" . self::ORDEN_PRO_PRIMERO;
         $resultado = $this->consultar($sql);
         return $this->armarCursos($resultado);
     }
 
+    // busca la palabra en el titulo, la descripcion o las etiquetas 
+    public function buscar(string $texto)
+    {
+        $sql = self::SELECT_CURSO . "
+                WHERE c.fecha_fin >= CURDATE()
+                  AND (c.titulo LIKE ?
+                       OR c.descripcion LIKE ?
+                       OR c.id_curso IN (SELECT ce.id_curso
+                                         FROM curso_etiqueta ce
+                                         JOIN etiqueta e ON e.id_etiqueta = ce.id_etiqueta
+                                         WHERE e.nombre LIKE ?))" . self::ORDEN_PRO_PRIMERO;
+
+        $patron = '%' . $texto . '%';   //los % son para que encuentre la palabra en cualquier parte
+        $resultado = $this->consultar($sql, 'sss', [$patron, $patron, $patron]);
+        return $this->armarCursos($resultado);
+    }
     // Cursos de creadores con plan Pro vigente que todavía no terminaron
     public function obtenerDestacados(int $idUsuario)
     {

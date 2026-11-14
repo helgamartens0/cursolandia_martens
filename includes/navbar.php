@@ -18,15 +18,17 @@ $paginaActual = $paginaActual ?? '';
           <ul class="dropdown-menu">
             <li><a class="dropdown-item" href="mis_cursos.php">Ver mis cursos</a></li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#">Ver todos los cursos</a></li>
+            <li><a class="dropdown-item" href="cursos.php">Ver todos los cursos</a></li>
           </ul>
         </li>
         <li class="nav-item">
           <a class="nav-link <?= $paginaActual === 'perfil' ? 'active' : '' ?>" href="perfil.php">PERFIL</a>
         </li>
       </ul>
-      <form class="d-flex" role="search">
-        <input class="form-control me-2" type="search" placeholder="Buscar cursos..." >
+
+      <form class="d-flex" method="get" action="cursos.php">
+        <input class="form-control me-2" type="search" name="q" placeholder="Buscar cursos..."
+               value="<?= htmlspecialchars($_GET['q'] ?? '') ?>">
       </form>
       
 <!-- para el avatar con las iniciales -> nos lleva al perfil yy para cerrar sesion -->

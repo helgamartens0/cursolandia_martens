@@ -171,6 +171,17 @@ $paginaActual = 'cursos';
                 </section>
                  
                  <!-- y el FORO -->
+                <section class="card">
+                    <div class="card-body p-4">
+                        <h2 class="h5 mb-3">Foro</h2>
+                        <?php if ($puedeVerMaterial): ?>
+                            <p class="text-secondary">Preguntá tus dudas y respondé las de tus compañeros.</p>
+                            <a href="foro.php?id=<?= $curso->getId() ?>" class="btn btn-iniciar px-4">Ir al foro</a>
+                        <?php else: ?>
+                            <p class="text-secondary mb-0">El foro está disponible para los inscriptos al curso.</p>
+                        <?php endif; ?>
+                    </div>
+                </section>
             </div>
 
             <!-- DERECHA: datos del curso y lo que puede hacer -->
