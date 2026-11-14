@@ -5,6 +5,7 @@ require_once __DIR__ . '/../controles/ControlCurso.php';
 require_once __DIR__ . '/../controles/ControlEtiqueta.php';
 require_once __DIR__ . '/../controles/ControlUsuario.php';
 require_once __DIR__ . '/../controles/ControlInscripcion.php';
+require_once __DIR__ . '/../controles/ControlArchivo.php';
 
 //el id del curso viene en la direccion: curso.php?id=5
 $idCurso = (int) ($_GET['id'] ?? 0);
@@ -32,6 +33,14 @@ $usuario = $controlUsuario->buscarPorId($_SESSION['id_usuario']);
 $estadoInscripcion = $controlInscripcion->obtenerEstado($_SESSION['id_usuario'], $curso->getId());  //null, 'pendiente' o 'confirmada'
 $inscriptos = $controlInscripcion->contarInscriptos($curso->getId());
 $inscripcionesActivas = $controlUsuario->contarInscripcionesActivas($_SESSION['id_usuario']);
+
+//material: lo cargo en el curso, y solo lo ven el creador y los confirmados
+$controlArchivo = new ControlArchivo($conexion);
+foreach ($controlArchivo->obtenerDeCurso($curso->getId()) as $archivo) {
+    $curso->agregarArchivo($archivo);
+}
+$puedeVerMaterial = $esCreador || $estadoInscripcion === 'confirmada';
+
 
 //error que deja procesar_inscripcion.php (se muestra una sola vez)
 $errorCurso = $_SESSION['error_curso'] ?? '';
@@ -132,7 +141,32 @@ $paginaActual = 'cursos';
                     </div>
                 </section>
 
-                <!-- aca despues van el MATERIAL (CU-10) y el FORO (CU-13 a 18) -->
+                                
+                <!-- MATERIAL: lo ven el creador y los inscriptos confirmados -->
+                <section class="card">
+                    <div class="card-body p-4">
+                        <h2 class="h5 mb-3">Material</h2>
+
+                        <?php if (!$puedeVerMaterial): ?>
+                            <p class="text-secondary mb-0">El material está disponible para los inscriptos al curso.</p>
+
+                        <?php elseif (count($curso->getArchivos()) === 0): ?>
+                            <p class="text-secondary mb-0">Todavía no hay material cargado.</p>
+
+                        <?php else: ?>
+                            <?php foreach ($curso->getArchivos() as $archivo): ?>
+                                <div class="border-bottom py-2">
+                                    <a href="descargar_material.php?id=<?= $archivo->getId_archivo() ?>&curso=<?= $curso->getId() ?>" class="link-registro">
+                                        <?= htmlspecialchars($archivo->getNombre()) ?>
+                                    </a>
+                                    <span class="text-secondary small">· <?= number_format($archivo->getTamanio_mb(), 2, ',', '.') ?> MB</span>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </div>
+                </section>
+                 
+                 <!-- y el FORO -->
             </div>
 
             <!-- DERECHA: datos del curso y lo que puede hacer -->

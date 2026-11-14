@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/Usuario.php';
+require_once __DIR__ . '/Archivo.php';
     class Curso{
         private int $id;
         private string $titulo;
@@ -10,6 +11,9 @@ require_once __DIR__ . '/Usuario.php';
         private $fecha_fin;
         private $tipo_acceso;
         private $creador;
+        private array $archivos = [];    //el material del curso
+        public const MAX_ARCHIVOS = 5;   //hasta 5 archivos por curso (plan gratuito)
+        public const MAX_MB_TOTAL = 10;  //entre todos, hasta 10 MB (plan gratuito)
         
         /*----------------------------------------*/
         
@@ -94,5 +98,24 @@ require_once __DIR__ . '/Usuario.php';
         //si es pago o privado, la inscripcion queda pendiente hasta que el creador la confirme
         public function requiereConfirmacion(){
             return !$this->esGratuito() || !$this->esPublico(); //o sea si noes gratuito o no es publico
+        }
+                
+        //---------------------------parte de arxivos-------------------------------------
+        //guarda en el curso un archivo de su material
+        public function agregarArchivo(Archivo $a): void{
+            $this->archivos[] = $a;
+        }
+
+        public function getArchivos(): array{
+            return $this->archivos;
+        }
+
+        //para calcular el tamaño total de todos los archivos subidos
+        public function tamanioTotalArchivos(): float{
+            $total = 0;
+            foreach ($this->archivos as $archivo) {
+                $total = $total + $archivo->getTamanio_mb();
+            }
+            return $total;
         }
     }
