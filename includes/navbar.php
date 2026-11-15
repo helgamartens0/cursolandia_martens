@@ -23,6 +23,7 @@ $notiSinLeer = $controlNotiNavbar->contarNoLeidas($_SESSION['id_usuario']);
           </a>
           <ul class="dropdown-menu">
             <li><a class="dropdown-item" href="mis_cursos.php">Ver mis cursos</a></li>
+            <li><a class="dropdown-item" href="crear_curso.php">Crear curso</a></li>
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" href="cursos.php">Ver todos los cursos</a></li>
           </ul>

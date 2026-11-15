@@ -22,20 +22,23 @@ class ControlCurso
         ORDER BY CASE WHEN u.tipo_plan = 'pro' AND u.fecha_venc_pro >= CURDATE() THEN 0 ELSE 1 END,
                  c.fecha_inicio";
 
-    // Todos los cursos q todavia no terminaron, primero los Pro
-    public function obtenerTodos()
-    {
-        $sql = self::SELECT_CURSO . "
-                WHERE c.fecha_fin >= CURDATE()" . self::ORDEN_PRO_PRIMERO;
-        $resultado = $this->consultar($sql);
-        return $this->armarCursos($resultado);
-    }
-
-    // busca la palabra en el titulo, la descripcion o las etiquetas 
-    public function buscar(string $texto)
+    
+    //todos los cursos que todavia no terminaron (sin los mios), primero los Pro
+    public function obtenerTodos(int $idUsuario)
     {
         $sql = self::SELECT_CURSO . "
                 WHERE c.fecha_fin >= CURDATE()
+                  AND c.id_creador <> ?" . self::ORDEN_PRO_PRIMERO;
+        $resultado = $this->consultar($sql, 'i', [$idUsuario]);
+        return $this->armarCursos($resultado);
+    }
+
+    //busca la palabra en el titulo, la descripcion o las etiquetas del curso (sin los mios)
+    public function buscar(string $texto, int $idUsuario)
+    {
+        $sql = self::SELECT_CURSO . "
+                WHERE c.fecha_fin >= CURDATE()
+                  AND c.id_creador <> ?
                   AND (c.titulo LIKE ?
                        OR c.descripcion LIKE ?
                        OR c.id_curso IN (SELECT ce.id_curso
@@ -44,19 +47,24 @@ class ControlCurso
                                          WHERE e.nombre LIKE ?))" . self::ORDEN_PRO_PRIMERO;
 
         $patron = '%' . $texto . '%';   //los % son para que encuentre la palabra en cualquier parte
-        $resultado = $this->consultar($sql, 'sss', [$patron, $patron, $patron]);
+        $resultado = $this->consultar($sql, 'isss', [$idUsuario, $patron, $patron, $patron]);
         return $this->armarCursos($resultado);
     }
+    
     // Cursos de creadores con plan Pro vigente que todavía no terminaron
+    // (sin los míos y sin los que ya estoy inscripto, esos salen en "mis cursos activos")
     public function obtenerDestacados(int $idUsuario)
     {
         $sql = self::SELECT_CURSO . "
-                WHERE u.tipo_plan = 'pro' 
+                WHERE u.tipo_plan = 'pro'
                   AND u.fecha_venc_pro >= CURDATE()
                   AND c.fecha_fin >= CURDATE()
                   AND c.id_creador <> ?
+                  AND c.id_curso NOT IN (SELECT i.id_curso
+                                         FROM inscripcion i
+                                         WHERE i.id_usuario = ?)
                 ORDER BY c.fecha_inicio";
-        $resultado = $this->consultar($sql,'i',[$idUsuario]);
+        $resultado = $this->consultar($sql, 'ii', [$idUsuario, $idUsuario]);
         return $this->armarCursos($resultado);
     }
 
@@ -148,6 +156,24 @@ class ControlCurso
                 WHERE i.id_usuario = ?
                 ORDER BY c.fecha_inicio DESC";
         $resultado = $this->consultar($sql, 'i', [$idUsuario]);
+        return $this->armarCursos($resultado);
+    }
+        
+    // cursos que tienen alguna etiqueta igual a los intereses del usuario
+    // (sin los que ya terminaron, sin los suyos y sin los que ya esta inscripto), primero los Pro 
+    public function obtenerRecomendados(int $idUsuario)
+    {
+        $sql = self::SELECT_CURSO . "
+                WHERE c.fecha_fin >= CURDATE()
+                  AND c.id_creador <> ?
+                  AND c.id_curso NOT IN (SELECT i.id_curso
+                                         FROM inscripcion i
+                                         WHERE i.id_usuario = ?)
+                  AND c.id_curso IN (SELECT ce.id_curso
+                                     FROM curso_etiqueta ce
+                                     JOIN usuario_interes ui ON ui.id_etiqueta = ce.id_etiqueta
+                                     WHERE ui.id_usuario = ?)" . self::ORDEN_PRO_PRIMERO;
+        $resultado = $this->consultar($sql, 'iii', [$idUsuario, $idUsuario, $idUsuario]);
         return $this->armarCursos($resultado);
     }
 }

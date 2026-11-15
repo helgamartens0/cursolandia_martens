@@ -7,11 +7,10 @@ require_once __DIR__ . '/../controles/ControlCurso.php';
 $busqueda = trim($_GET['q'] ?? '');
 
 $controlCurso = new ControlCurso($conexion);
-
 if ($busqueda === '') {
-    $cursos = $controlCurso->obtenerTodos();
+    $cursos = $controlCurso->obtenerTodos($_SESSION['id_usuario']);
 } else {
-    $cursos = $controlCurso->buscar($busqueda);
+    $cursos = $controlCurso->buscar($busqueda, $_SESSION['id_usuario']);
 }
 
 $paginaActual = 'cursos';
