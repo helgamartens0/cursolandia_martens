@@ -98,5 +98,11 @@ class ControlUsuario{
         $this->consultar($sql, 'si', [$ruta, $id]);
     }
     
+    //guarda la contraseña nueva encriptada
+    public function actualizarContrasenia(int $id, string $nueva): void{
+        $hash = password_hash($nueva, PASSWORD_DEFAULT);
+        $sql = "UPDATE usuario SET contrasenia = ? WHERE id_usuario = ?";
+        $this->consultar($sql, 'si', [$hash, $id]);
+    }
     
 }

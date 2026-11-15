@@ -172,7 +172,22 @@ $paginaActual = 'perfil';
                 <section class="card">
                     <div class="card-body p-4">
                         <h2 class="h5 mb-3">Cambiar contraseña</h2>
-                        <p class="text-secondary small mb-0">Próximamente.</p>
+                        <form method="post" action="../procesos/procesar_contrasenia.php">
+                            <div class="mb-3">
+                                <label for="actual" class="form-label">Contraseña actual</label>
+                                <input type="password" id="actual" name="actual" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="nueva" class="form-label">Contraseña nueva</label>
+                                <input type="password" id="nueva" name="nueva" class="form-control" minlength="8" required>
+                                <div class="form-text">Al menos 8 caracteres</div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="nueva2" class="form-label">Repetí la contraseña nueva</label>
+                                <input type="password" id="nueva2" name="nueva2" class="form-control" minlength="8" required>
+                            </div>
+                            <button type="submit" class="btn btn-registrarse w-100">Cambiar contraseña</button>
+                        </form>
                     </div>
                 </section>
             </div>

@@ -88,6 +88,11 @@ class Usuario{
             return password_verify($clave,$this->contrasenia);
         }
         
+        //el cambio se puede hacer solo si la contraseña actual es la correcta
+        public function cambiarContrasenia(string $actual, string $nueva): bool{
+            return $this->verificarContrasenia($actual);
+        }//el objeto solo decide si se puede cambiar, y el CONTROL la guarda
+        
         public function esPro(){
             if($this->tipo_plan === 'pro' && date('Y-m-d')<=$this->fecha_venc_pro){
                 return true;
