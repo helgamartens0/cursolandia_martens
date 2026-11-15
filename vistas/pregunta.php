@@ -55,6 +55,12 @@ $aviso = $_SESSION['aviso_pregunta'] ?? '';
 unset($_SESSION['aviso_pregunta']);
 
 $autor = $pregunta->getAutor();
+
+// aceptan el docente o quien hizo la pregunta
+$puedeAceptar = ($esCreador || $autor->getId_usuario() == $_SESSION['id_usuario'])
+                && !$pregunta->estaCerrada() && $curso->estaActivo();
+                
+                
 $paginaActual = 'cursos';
 ?>
 <!DOCTYPE html>
@@ -109,6 +115,26 @@ $paginaActual = 'cursos';
                     <?php endif; ?>
                 </div>
                 <p class="mb-0 fs-5"><?= nl2br(htmlspecialchars($pregunta->getTexto())) ?></p>
+                    <?php if ($esCreador): ?>
+                    <!--  solo el creador del curso marca como destacada o la elimina!! -->
+                    <div class="d-flex flex-wrap gap-2 mt-3">
+                        <?php if (!$pregunta->estaDestacada()): ?>
+                            <form method="post" action="../procesos/procesar_accion_pregunta.php">
+                                <input type="hidden" name="id_pregunta" value="<?= $pregunta->getId_pregunta() ?>">
+                                <input type="hidden" name="id_curso" value="<?= $curso->getId() ?>">
+                                <input type="hidden" name="accion" value="destacar">
+                                <button type="submit" class="btn btn-registrarse btn-sm px-3">Destacar</button>
+                            </form>
+                        <?php endif; ?>
+                        <form method="post" action="../procesos/procesar_accion_pregunta.php"
+                              onsubmit="return confirm('¿Eliminar la pregunta y todas sus respuestas?');">
+                            <input type="hidden" name="id_pregunta" value="<?= $pregunta->getId_pregunta() ?>">
+                            <input type="hidden" name="id_curso" value="<?= $curso->getId() ?>">
+                            <input type="hidden" name="accion" value="eliminar">
+                            <button type="submit" class="btn btn-outline-danger btn-sm px-3">Eliminar</button>
+                        </form>
+                    </div>
+                <?php endif; ?>
             </div>
         </section>
 
@@ -121,12 +147,15 @@ $paginaActual = 'cursos';
 
         <?php foreach ($pregunta->getRespuestas() as $respuesta): ?>
             <?php $quien = $respuesta->getAutor(); ?>
-            <section class="card mb-3">
+                <section class="card mb-3 <?php if ($respuesta->estaAceptada()) { echo 'card-pro'; } ?>">
                 <div class="card-body p-4">
                     <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
                         <?php mostrarAvatar($quien); ?>
                         <strong><?= htmlspecialchars($quien->getNombre() . ' ' . $quien->getApellido()) ?></strong>
                         <?php if ($quien->getId_usuario() == $curso->getIdCreador()): ?>
+                            <?php if ($respuesta->estaAceptada()): ?>
+                            <span class="badge">ACEPTADA</span>
+                            <?php endif; ?>
                             <span class="badge badge-gratuito">Docente</span>
                         <?php endif; ?>
                         <span class="text-secondary small">· <?= date('d/m/Y H:i', strtotime($respuesta->getFecha_creacion())) ?></span>
@@ -135,6 +164,17 @@ $paginaActual = 'cursos';
                         <?php endif; ?>
                     </div>
                     <p class="mb-0"><?= nl2br(htmlspecialchars($respuesta->getTexto())) ?></p>
+                    
+                        <!--PARA MARCAR COMO ACEPTADAS-->
+                    <?php if ($puedeAceptar): ?>
+                        <form method="post" action="../procesos/procesar_accion_pregunta.php" class="mt-3">
+                            <input type="hidden" name="id_pregunta" value="<?= $pregunta->getId_pregunta() ?>">
+                            <input type="hidden" name="id_curso" value="<?= $curso->getId() ?>">
+                            <input type="hidden" name="id_respuesta" value="<?= $respuesta->getId_respuesta() ?>">
+                            <input type="hidden" name="accion" value="aceptar">
+                            <button type="submit" class="btn btn-registrarse btn-sm px-3">Marcar como aceptada</button>
+                        </form>
+                    <?php endif; ?>
                 </div>
             </section>
         <?php endforeach; ?>

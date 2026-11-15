@@ -81,4 +81,28 @@ class ControlPregunta
         $fila = mysqli_fetch_assoc($this->consultar($sql, 'i', [$idPregunta]));
         return (int) $fila['cantidad'];
     }
+    
+    // marca la respuesta como aceptada y cierra la pregunta
+    public function aceptarRespuesta(int $idPregunta, int $idRespuesta): void
+    {
+        $sql = "UPDATE respuesta SET aceptada = TRUE WHERE id_respuesta = ? AND id_pregunta = ?";
+        $this->consultar($sql, 'ii', [$idRespuesta, $idPregunta]);
+
+        $sql = "UPDATE pregunta SET cerrada = TRUE WHERE id_pregunta = ?";
+        $this->consultar($sql, 'i', [$idPregunta]);
+    }
+
+    //la pregunta pasa a mostrarse primero en el foro
+    public function destacar(int $idPregunta): void
+    {
+        $sql = "UPDATE pregunta SET destacada = TRUE WHERE id_pregunta = ?";
+        $this->consultar($sql, 'i', [$idPregunta]);
+    }
+
+    //borra la pregunta (sus respuestas se borran solas x el ON DELETE CASCADE)
+    public function eliminar(int $idPregunta): void
+    {
+        $sql = "DELETE FROM pregunta WHERE id_pregunta = ?";
+        $this->consultar($sql, 'i', [$idPregunta]);
+    }
 }
