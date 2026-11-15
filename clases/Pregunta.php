@@ -70,4 +70,19 @@ class Pregunta{
         }
         return $ultima->getAutor();
     }
+    
+    //el que hizo la pregunta y los que respondieron, sin repetir a nadie
+    public function participantes(): array{
+        $participantes = [$this->autor];
+        $ids = [$this->autor->getId_usuario()];
+
+        foreach ($this->respuestas as $respuesta) {
+            $quien = $respuesta->getAutor();
+            if (!in_array($quien->getId_usuario(), $ids)) {
+                $participantes[] = $quien;
+                $ids[] = $quien->getId_usuario();
+            }
+        }
+        return $participantes;
+    }
 }

@@ -11,6 +11,7 @@ require_once __DIR__ . '/../controles/ControlCurso.php';
 require_once __DIR__ . '/../controles/ControlInscripcion.php';
 require_once __DIR__ . '/../controles/ControlPregunta.php';
 require_once __DIR__ . '/../controles/ControlRespuesta.php';
+require_once __DIR__ . '/../controles/ControlNotificacion.php';
 
 $idPregunta = (int) ($_POST['id_pregunta'] ?? 0);
 $idCurso = (int) ($_POST['id_curso'] ?? 0);
@@ -65,7 +66,12 @@ if ($accion === 'eliminar') {
         exit;
     }
     $controlPregunta->eliminar($idPregunta);
-    //aca despues va la notificacion al autor de la pregunta 
+    
+    //aviso al que hizo la pregunta (va sin id de pregunta porque ya no existe)
+    $controlNotificacion = new ControlNotificacion($conexion);
+    $mensaje = 'El docente eliminó tu pregunta "' . $controlNotificacion->resumir($pregunta->getTexto()) . '" del curso ' . $curso->getTitulo();
+    $controlNotificacion->enviar([$pregunta->getAutor()], $idCurso, null, 'preguntaEliminada', $mensaje, $_SESSION['id_usuario']);
+
     $_SESSION['aviso_foro'] = 'Pregunta eliminada.';
     header('Location: ../vistas/foro.php?id=' . $idCurso);   //la pregunta ya no existe, vuelvo al foro
     exit;
@@ -104,7 +110,24 @@ if ($accion === 'aceptar') {
     }
 
     $controlPregunta->aceptarRespuesta($idPregunta, $elegida->getId_respuesta());
-    //aca despues va la notificacion a los participantes
+    
+    //aviso a los participantes, y al de la respuesta aceptada con un mensaje especial(?)
+    $controlNotificacion = new ControlNotificacion($conexion);
+    $resumen = $controlNotificacion->resumir($pregunta->getTexto());
+    $autorAceptada = $elegida->getAutor();
+
+    $otros = [];
+    foreach ($pregunta->participantes() as $participante) {
+        if ($participante->getId_usuario() != $autorAceptada->getId_usuario()) {
+            $otros[] = $participante;
+        }
+    }
+    $mensaje = 'Se cerró la pregunta "' . $resumen . '" en ' . $curso->getTitulo() . ': ya tiene una respuesta aceptada';
+    $controlNotificacion->enviar($otros, $idCurso, $idPregunta, 'preguntaCerrada', $mensaje, $_SESSION['id_usuario']);
+
+    $mensaje = '¡Aceptaron tu respuesta a la pregunta "' . $resumen . '"! (' . $curso->getTitulo() . ')';
+    $controlNotificacion->enviar([$autorAceptada], $idCurso, $idPregunta, 'preguntaCerrada', $mensaje, $_SESSION['id_usuario']);
+    
     $_SESSION['aviso_pregunta'] = 'Respuesta aceptada. La pregunta quedó cerrada.';
 }
 

@@ -11,6 +11,7 @@ require_once __DIR__ . '/../controles/ControlCurso.php';
 require_once __DIR__ . '/../controles/ControlInscripcion.php';
 require_once __DIR__ . '/../controles/ControlPregunta.php';
 require_once __DIR__ . '/../controles/ControlRespuesta.php';
+require_once __DIR__ . '/../controles/ControlNotificacion.php';
 
 $idPregunta = (int) ($_POST['id_pregunta'] ?? 0);
 $idCurso = (int) ($_POST['id_curso'] ?? 0);
@@ -73,7 +74,7 @@ if ($accion === 'responder' && $participeUltimo) {
     }
 }
 
-//CU-15: solo se edita la ultima respuesta, y solo si es mia
+//solo se edita la ultima respuesta, y solo si es del creador de la ultima rta
 if ($accion === 'editar' && ($ultimaRespuesta === null || !$participeUltimo)) {
     $errores[] = 'Solo podés editar tu respuesta mientras sea la última.';
 }
@@ -86,7 +87,12 @@ if (count($errores) > 0) {
 
 if ($accion === 'responder') {
     $controlRespuesta->crear($idPregunta, $_SESSION['id_usuario'], $texto);
-    //aca despues pongo la notificacion a los participantes de la pregunta (buscar creo q estaba en mi archivo aparte en el drive)
+   
+    //aviso a los participantes (el que pregunto y los que respondieron)
+    $controlNotificacion = new ControlNotificacion($conexion);
+    $mensaje = $_SESSION['nombre'] . ' respondió la pregunta "' . $controlNotificacion->resumir($pregunta->getTexto()) . '" en ' . $curso->getTitulo();
+    $controlNotificacion->enviar($pregunta->participantes(), $idCurso, $idPregunta, 'respuestaNueva', $mensaje, $_SESSION['id_usuario']);
+    
     $_SESSION['aviso_pregunta'] = 'Respuesta publicada.';
 } elseif ($accion === 'editar') {
     $controlRespuesta->editar($ultimaRespuesta->getId_respuesta(), $_SESSION['id_usuario'], $texto);   

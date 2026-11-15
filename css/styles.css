@@ -370,3 +370,16 @@ h1, h2{
     font-size: 1.6rem;
     flex-shrink: 0;
 }
+
+/* campanita de notificaciones en la navbar */
+.campanita{
+    color: white;
+    display: inline-flex;
+}
+.campanita:hover{
+    color: var(--color-principal-oscuro);
+}
+/* notificacion sin leer: rayita de color a la izquierda */
+.noti-nueva{
+    border-left: 4px solid var(--color-acento);
+}

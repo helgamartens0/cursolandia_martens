@@ -1,6 +1,12 @@
 <?php
 // cada página dice en $paginaActual cuál es ('cursos' o 'perfil') antes de incluir el navbar
 $paginaActual = $paginaActual ?? '';
+
+//cuantas notificaciones sin leer tiene (para el numerito de la campanita)
+require_once __DIR__ . '/../controles/ControlNotificacion.php';
+$controlNotiNavbar = new ControlNotificacion($conexion);
+$notiSinLeer = $controlNotiNavbar->contarNoLeidas($_SESSION['id_usuario']);
+
 ?>
 <nav class="navbar navbar-expand-lg">
   <div class="container-fluid">
@@ -30,6 +36,16 @@ $paginaActual = $paginaActual ?? '';
         <input class="form-control me-2" type="search" name="q" placeholder="Buscar cursos..."
                value="<?= htmlspecialchars($_GET['q'] ?? '') ?>">
       </form>
+            
+      
+      <!-- campanita con las notificaciones sin leer -->
+      <a href="notificaciones.php" class="campanita position-relative me-3">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <?php if ($notiSinLeer > 0): ?>
+          <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"><?= $notiSinLeer ?></span>
+        <?php endif; ?>
+      </a>
+      
       
 <!-- para el avatar con las iniciales -> nos lleva al perfil yy para cerrar sesion -->
       <div class="dropdown">

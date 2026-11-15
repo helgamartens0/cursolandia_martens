@@ -10,6 +10,7 @@ require_once __DIR__ . '/../conexiones/conexion.php';
 require_once __DIR__ . '/../controles/ControlCurso.php';
 require_once __DIR__ . '/../controles/ControlInscripcion.php';
 require_once __DIR__ . '/../controles/ControlPregunta.php';
+require_once __DIR__ . '/../controles/ControlNotificacion.php';
 
 $idCurso = (int) ($_POST['id_curso'] ?? 0);
 $texto = trim($_POST['texto'] ?? '');
@@ -49,7 +50,16 @@ if (count($errores) > 0) {
 $controlPregunta = new ControlPregunta($conexion);
 $idPregunta = $controlPregunta->crear($idCurso, $_SESSION['id_usuario'], $texto);
 
-//falta la noti q dsp lo agrego
+//aviso a todos los del curso (el creador y los inscriptos confirmados), menos al q hizo la preg
+$usuariosCurso = [$curso->getCreador()];
+foreach ($controlInscripcion->obtenerDeCurso($idCurso) as $inscripcion) {
+    if ($inscripcion->estaConfirmada()) {
+        $usuariosCurso[] = $inscripcion->getUsuario();
+    }
+}
+$controlNotificacion = new ControlNotificacion($conexion);
+$mensaje = $_SESSION['nombre'] . ' hizo una pregunta en ' . $curso->getTitulo() . ': "' . $controlNotificacion->resumir($texto) . '"';
+$controlNotificacion->enviar($usuariosCurso, $idCurso, $idPregunta, 'preguntaCreada', $mensaje, $_SESSION['id_usuario']);
 
 $_SESSION['aviso_foro'] = 'Pregunta publicada.';
 header('Location: ../vistas/foro.php?id=' . $idCurso);
