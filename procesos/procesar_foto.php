@@ -52,7 +52,7 @@ if (!move_uploaded_file($foto['tmp_name'], $carpeta . '/' . $nombreFoto)) {
 }
 
 //si ya tenia una foto, borro la vieja para que no quede ocupando lugar
-if ($usuario->tieneFoto()) {
+if ($usuario->tieneFoto() && strpos($usuario->getImagen_principal(), 'img/perfiles/') === 0) {
     $vieja = __DIR__ . '/../' . $usuario->getImagen_principal();
     if (is_file($vieja)) {
         unlink($vieja);

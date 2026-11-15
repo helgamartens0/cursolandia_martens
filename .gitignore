@@ -1,5 +1,7 @@
 conexiones/config.php
-uploads/comprobantes/
-uploads/material/
 img/perfiles/
 consigna TPI - Programacion III.pdf
+uploads/comprobantes/*
+!uploads/comprobantes/ejemplo_comprobante_*.pdf
+uploads/material/*
+!uploads/material/ejemplo_material.pdf
