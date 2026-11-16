@@ -31,8 +31,7 @@ class Administrador{
     
     /*----------------------------------------*/
     //como la contraseña nunca sale de la clase, la verificamos con password_verify
-    //recordatorio: password_verify sirve para comprobar si una contraseña ingresada por el usuario 
-    //coinicide con una q fue guardada mediante un hash 
+
     public function verificarContrasenia(string $clave): bool{
         return password_verify($clave,$this->contrasenia);
     }
